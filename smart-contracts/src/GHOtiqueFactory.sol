@@ -1,8 +1,8 @@
 //SPDX-License-Identifier: MIT
 pragma solidity 0.8.20;
 
-import "@openzeppelin/contracts/proxy/Clones.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
+import {Clones} from "@openzeppelin/contracts/proxy/Clones.sol";
+import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 
 error NonExistingProxy();
 error ZeroAddress();
@@ -10,17 +10,21 @@ contract GHOtiqueFactory is Ownable {
     using Clones for address;
 
     uint256 private _proxyId;
+    uint256 private _minInitialInvestment;
     address private _implementation;
+    address private _gho;
 
     event ProxyCreated(address proxy);
 
-    constructor (address implementation) Ownable(msg.sender) {
+    constructor (address implementation, address gho) Ownable(msg.sender) {
         if (implementation == address(0)) revert ZeroAddress();
         _implementation = implementation;
+        _gho = gho
     }
 
     function createNewMirrorTable() external payable returns (address) {
         address newMirror = _implementation.cloneDeterministic(bytes32(_proxyId));
+        newMirror.initialize(name, symbol, _gho, msg.sender);
         _proxyId++;
 
         emit ProxyCreated(newMirror);
@@ -35,5 +39,17 @@ contract GHOtiqueFactory is Ownable {
 
     function getCurrentProxyId() external view returns (uint256) {
         return _proxyId;
+    }
+
+    function getMinInitialInvestment() external view returns (uint256) {
+        return _minInitialInvestment;
+    }
+
+    function setMinInitialInvestment(uint256 minInitialInvestment) external onlyOwner {
+        _minInitialInvestment = minInitialInvestment;
+    }
+
+    function getImplementation() external view returns (address) {
+        return _implementation;
     }
 }
