@@ -7,14 +7,9 @@ import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 contract MockERC20 is ERC20, Ownable {
     error InvalidLength();
 
-    constructor(address[] memory accounts, uint256[] memory amounts) ERC20("RandomToken", "RTK") Ownable(msg.sender) {
-        if (accounts.length != amounts.length) revert InvalidLength();
-        for (uint256 i = 0; i < accounts.length; i++) {
-            _mint(accounts[i], amounts[i]);
-        }
-    }
+    constructor() ERC20("RandomToken", "RTK") Ownable(msg.sender){}
 
-    function mint(address to, uint256 amount) external onlyOwner {
+    function mint(address to, uint256 amount) external {
         _mint(to, amount);
     }
 }

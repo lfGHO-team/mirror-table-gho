@@ -4,6 +4,7 @@ pragma solidity 0.8.20;
 import {Clones} from "@openzeppelin/contracts/proxy/Clones.sol";
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 import {Ghotique} from "./GHOtique.sol";
+import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 error NonExistingProxy();
 error ZeroAddress();
@@ -27,11 +28,15 @@ contract GHOtiqueFactory is Ownable {
         string memory name,
         string memory symbol,
         address[] memory owners,
-        uint256 numConfirmationsRequired
+        uint256 numConfirmationsRequired, 
+        uint256 minInitialInvestment
     ) external payable returns (address) {
         address newMirror = _implementation.cloneDeterministic(bytes32(_proxyId));
         Ghotique ghotiqueVault = Ghotique(payable(newMirror));
         ghotiqueVault.initialize(name, symbol, _gho, msg.sender, owners, numConfirmationsRequired);
+        IERC20(_gho).transferFrom(msg.sender, address(this), minInitialInvestment);
+        IERC20(_gho).approve(newMirror, minInitialInvestment);
+        ghotiqueVault.deposit(minInitialInvestment, msg.sender);
         _proxyId++;
 
         emit ProxyCreated(newMirror);
