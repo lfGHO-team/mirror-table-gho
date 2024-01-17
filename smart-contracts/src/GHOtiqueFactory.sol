@@ -3,6 +3,7 @@ pragma solidity 0.8.20;
 
 import {Clones} from "@openzeppelin/contracts/proxy/Clones.sol";
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
+import {Ghotique} from "./GHOtique.sol";
 
 error NonExistingProxy();
 error ZeroAddress();
@@ -19,12 +20,18 @@ contract GHOtiqueFactory is Ownable {
     constructor (address implementation, address gho) Ownable(msg.sender) {
         if (implementation == address(0)) revert ZeroAddress();
         _implementation = implementation;
-        _gho = gho
+        _gho = gho;
     }
 
-    function createNewMirrorTable() external payable returns (address) {
+    function createNewMirrorTable(
+        string memory name,
+        string memory symbol,
+        address[] memory owners,
+        uint256 numConfirmationsRequired
+    ) external payable returns (address) {
         address newMirror = _implementation.cloneDeterministic(bytes32(_proxyId));
-        newMirror.initialize(name, symbol, _gho, msg.sender);
+        Ghotique ghotiqueVault = Ghotique(payable(newMirror));
+        ghotiqueVault.initialize(name, symbol, _gho, msg.sender, owners, numConfirmationsRequired);
         _proxyId++;
 
         emit ProxyCreated(newMirror);

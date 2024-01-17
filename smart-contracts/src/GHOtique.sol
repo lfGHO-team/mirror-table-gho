@@ -4,9 +4,10 @@ pragma solidity 0.8.20;
 import {OwnableUpgradeable } from "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import {ERC4626Upgradeable} from "@openzeppelin/contracts-upgradeable/token/ERC20/extensions/ERC4626Upgradeable.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import {MultiSigWallet} from "./MultiSig.sol";
 
 
-contract Ghotique is ERC4626Upgradeable, OwnableUpgradeable {
+contract Ghotique is ERC4626Upgradeable, OwnableUpgradeable,  MultiSigWallet {
 
  
     mapping(address => uint256) public shareHolder;
@@ -24,11 +25,14 @@ contract Ghotique is ERC4626Upgradeable, OwnableUpgradeable {
         string memory name_,
         string memory symbol_,
         address asset_,
-        address vaultOwner
+        address vaultOwner,
+        address[] memory owners,
+        uint256 numConfirmationsRequired
     ) public initializer {
         __ERC4626_init(IERC20(asset_));
         __ERC20_init_unchained(name_, symbol_);
         __Ownable_init(vaultOwner);
+        __Multisig_init_unchained(owners, numConfirmationsRequired);
     }
 
         /**
