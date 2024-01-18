@@ -121,7 +121,5 @@ Note `--sender` is the public address of your private key
 forge script script/DeployTestnet.s.sol:Deploy --rpc-url $SEPOLIA_KEY  --account <PRIVATE_KEY_NAME> --sender <ACCOUNT_ADDRESS> --broadcast --verify --etherscan-api-key $ETHERSCAN_KEY -vvvv
 ```
 
-GHO token 0xc4bF5CbDaBE595361438F8c6a187bDc330539c60
-deposit gho, use gho
-deposit anything, use gho
+
 

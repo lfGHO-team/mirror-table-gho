@@ -20,6 +20,7 @@ contract GhotiqueTest is Test {
         vm.etch(deploy.gho(), code);
         MockERC20(deploy.gho()).mint(deploy.alice(), 1000 ether);
         MockERC20(deploy.gho()).mint(deploy.bob(), 1000 ether);
+        MockERC20(deploy.gho()).mint(deploy.deployer(), 1000 ether);
     }
 
     function test_deployGho() public {
@@ -28,7 +29,7 @@ contract GhotiqueTest is Test {
         addresses[0] = deploy.alice();
         addresses[1] = deploy.bob();
         
-        vm.startPrank(deploy.alice());
+        vm.startPrank(deploy.alice(), deploy.alice());
         // Deployer of Vault (Founder) approves the Vault Factory to move GHO in their name
         MockERC20(deploy.gho()).approve(address (ghoVaultFactory), 1000 ether);
         // Deployer of Vault (Founder) creates a new Vault through the Factory
@@ -42,17 +43,41 @@ contract GhotiqueTest is Test {
     function test_depositGHO() public {
         address ghoVault = _deployVault();
         //A user different than original founder deposits GHO to get shares
-        vm.startPrank(deploy.bob());
+        vm.startPrank(deploy.bob(), deploy.bob());
         MockERC20(deploy.gho()).approve(address(ghoVault), 1000 ether);
         Ghotique(payable(ghoVault)).deposit(100 ether, deploy.bob());
         vm.stopPrank();
         assertEq(Ghotique(payable(ghoVault)).balanceOf(deploy.bob()), 100 ether);
     }
 
+    function testFail_depositGHONotAllowed() public {
+        address ghoVault = _deployVault();
+        vm.startPrank(deploy.deployer(), deploy.deployer());
+        MockERC20(deploy.gho()).approve(address(ghoVault), 1000 ether);
+        Ghotique(payable(ghoVault)).deposit(100 ether, deploy.bob());
+        vm.stopPrank();
+        assertEq(Ghotique(payable(ghoVault)).balanceOf(deploy.deployer()), 100 ether);
+    }
+
+    function testAddInvestor() public {
+        address ghoVault = _deployVault();
+
+        Ghotique ghostVaultContract = Ghotique(payable(ghoVault));
+        vm.startPrank(deploy.alice(), deploy.alice());
+        ghostVaultContract.addInvestor(deploy.deployer());
+        vm.stopPrank();
+
+        vm.startPrank(deploy.deployer(), deploy.deployer());
+        MockERC20(deploy.gho()).approve(address(ghoVault), 1000 ether);
+        Ghotique(payable(ghoVault)).deposit(100 ether, deploy.deployer());
+        vm.stopPrank();
+        assertEq(Ghotique(payable(ghoVault)).balanceOf(deploy.deployer()), 100 ether);
+    }
+
     function test_redeemGHO() public {
         address ghoVault = _vaultFullSetup();
         //A user different than original founder burns shares to recover GHO
-        vm.startPrank(deploy.bob());
+        vm.startPrank(deploy.bob(), deploy.bob());
         Ghotique(payable(ghoVault)).redeem(100 ether, deploy.bob(), deploy.bob());
         vm.stopPrank();
         assertEq(Ghotique(payable(ghoVault)).balanceOf(deploy.bob()), 0 ether);
@@ -63,13 +88,13 @@ contract GhotiqueTest is Test {
         Ghotique ghostVaultContract = Ghotique(payable(ghoVault));
         //We design a transfer tx to Bob for Marketing
         bytes memory txData = abi.encodeWithSignature("transfer(address,uint256)", deploy.bob(), 50 ether);
-        vm.startPrank(deploy.alice());
+        vm.startPrank(deploy.alice(), deploy.alice());
         //Any of the signers (Founders) can propose a transaction
         ghostVaultContract.submitTransaction(deploy.gho(), 0, txData);
         //1/2 signatures
         ghostVaultContract.confirmTransaction(ghostVaultContract.getTransactionCount()-1); //transation 0, the last one declared
         vm.stopPrank();
-        vm.startPrank(deploy.bob());
+        vm.startPrank(deploy.bob(), deploy.bob());
         //2/2 signatures
         ghostVaultContract.confirmTransaction(ghostVaultContract.getTransactionCount()-1); //transation 0, the last one declared
         //After we get all required signatures, anyone can execute the transaction
@@ -82,7 +107,7 @@ contract GhotiqueTest is Test {
         address[] memory addresses = new address[](2);
         addresses[0] = deploy.alice();
         addresses[1] = deploy.bob();
-        vm.startPrank(deploy.alice());
+        vm.startPrank(deploy.alice(), deploy.alice());
         // Deployer of Vault (Founder) approves the Vault Factory to move GHO in their name
         MockERC20(deploy.gho()).approve(address (ghoVaultFactory), 1000 ether);
         // Deployer of Vault (Founder) creates a new Vault through the Factory
@@ -94,7 +119,7 @@ contract GhotiqueTest is Test {
     function _vaultFullSetup() internal returns (address){
         address ghoVault = _deployVault();
         //A user different than original founder deposits GHO to get shares
-        vm.startPrank(deploy.bob());
+        vm.startPrank(deploy.bob(), deploy.bob());
         MockERC20(deploy.gho()).approve(address(ghoVault), 1000 ether);
         Ghotique(payable(ghoVault)).deposit(100 ether, deploy.bob());
         vm.stopPrank();

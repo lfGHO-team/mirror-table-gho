@@ -11,6 +11,15 @@ contract Ghotique is ERC4626Upgradeable, MultiSigWallet {
 
  
     mapping(address => uint256) public shareHolder;
+    mapping(address => bool) public accreditedInvestor;
+
+    event InvestorAdded(address indexed investor);
+    event InvestorRemoved(address indexed investor);
+
+    modifier onlyAccreditedInvestors() {
+        require(accreditedInvestor[msg.sender] || isOwner[msg.sender] , "Not an accredited investor");
+        _;
+    }
 
     constructor() {
         _disableInitializers();
@@ -25,13 +34,30 @@ contract Ghotique is ERC4626Upgradeable, MultiSigWallet {
         string memory name_,
         string memory symbol_,
         address asset_,
-        address vaultOwner,
-        address[] memory owners,
-        uint256 numConfirmationsRequired
+        address[] memory owners_,
+        uint256 numConfirmationsRequired_,
+        uint256 minInitialInvestment_
     ) public initializer {
         __ERC4626_init(IERC20(asset_));
         __ERC20_init_unchained(name_, symbol_);
-        __Multisig_init_unchained(owners, numConfirmationsRequired);
+        __Multisig_init_unchained(owners_, numConfirmationsRequired_);
+        _deposit(_msgSender(), tx.origin, minInitialInvestment_, minInitialInvestment_);
+    }
+
+    function addInvestor(address investor) public onlySigners() {
+        require(!accreditedInvestor[investor], "Already an investor");
+        require(investor != address(0), "Invalid address");
+
+        accreditedInvestor[investor] = true;
+        emit InvestorAdded(investor);
+    }
+
+    function removeInvestor(address investor) public onlySigners() {
+        require(accreditedInvestor[investor], "Not an investor");
+        require(investor != address(0), "Invalid address");
+
+        accreditedInvestor[investor] = false;
+        emit InvestorRemoved(investor);
     }
 
         /**
@@ -39,7 +65,7 @@ contract Ghotique is ERC4626Upgradeable, MultiSigWallet {
     * @param assets amount of the asset token
     * @param receiver address of the receiver
     */
-    function deposit(uint256 assets, address receiver) public override returns (uint256) {
+    function deposit(uint256 assets, address receiver) public override onlyAccreditedInvestors() returns (uint256) {
         uint256 maxAssets = maxDeposit(receiver);
         if (assets > maxAssets) {
             revert ERC4626ExceededMaxDeposit(receiver, assets, maxAssets);
@@ -62,6 +88,18 @@ contract Ghotique is ERC4626Upgradeable, MultiSigWallet {
         uint256 assets = previewRedeem(shares);
         shareHolder[msg.sender] -= assets;
         _withdraw(_msgSender(), receiver, owner, assets, shares);
+
+        return assets;
+    }
+
+        function mint(uint256 shares, address receiver) public override onlyAccreditedInvestors() returns (uint256) {
+        uint256 maxShares = maxMint(receiver);
+        if (shares > maxShares) {
+            revert ERC4626ExceededMaxMint(receiver, shares, maxShares);
+        }
+
+        uint256 assets = previewMint(shares);
+        _deposit(_msgSender(), receiver, assets, shares);
 
         return assets;
     }

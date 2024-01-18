@@ -36,12 +36,13 @@ contract GHOtiqueFactory is Ownable {
         uint256 minInitialInvestment
     ) external payable returns (address) {
         require(minInitialInvestment >= _minInitialInvestment, "GHOtiqueFactory: minInitialInvestment is too low");
+        require(owners.length > 0, "GHOtiqueFactory: owners must be greater than 0");
+
         address newMirror = _implementation.cloneDeterministic(bytes32(_proxyId));
-        Ghotique ghotiqueVault = Ghotique(payable(newMirror));
-        ghotiqueVault.initialize(name, symbol, _gho, msg.sender, owners, numConfirmationsRequired);
         IERC20(_gho).transferFrom(msg.sender, address(this), minInitialInvestment);
         IERC20(_gho).approve(newMirror, minInitialInvestment);
-        ghotiqueVault.deposit(minInitialInvestment, msg.sender);
+        Ghotique ghotiqueVault = Ghotique(payable(newMirror));
+        ghotiqueVault.initialize(name, symbol, _gho, owners, numConfirmationsRequired, minInitialInvestment);
         _proxyId++;
 
         emit ProxyCreated(newMirror);
