@@ -27,7 +27,7 @@ contract Deploy is Script {
         vm.startBroadcast();
 
         ghotique = new Ghotique();
-        ghoFactory = new GHOtiqueFactory(address(ghotique), gho);
+        ghoFactory = new GHOtiqueFactory(address(ghotique), gho, 50 ether);
 
         vm.stopBroadcast();
     }

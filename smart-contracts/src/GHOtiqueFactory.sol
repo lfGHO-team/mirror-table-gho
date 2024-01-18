@@ -18,10 +18,14 @@ contract GHOtiqueFactory is Ownable {
 
     event ProxyCreated(address proxy);
 
-    constructor (address implementation, address gho) Ownable(msg.sender) {
+    constructor (
+        address implementation, 
+        address gho, 
+        uint256 minInitialInvestment) Ownable(msg.sender) {
         if (implementation == address(0)) revert ZeroAddress();
         _implementation = implementation;
         _gho = gho;
+        _minInitialInvestment = minInitialInvestment;
     }
 
     function createNewMirrorTable(
@@ -31,6 +35,7 @@ contract GHOtiqueFactory is Ownable {
         uint256 numConfirmationsRequired, 
         uint256 minInitialInvestment
     ) external payable returns (address) {
+        require(minInitialInvestment >= _minInitialInvestment, "GHOtiqueFactory: minInitialInvestment is too low");
         address newMirror = _implementation.cloneDeterministic(bytes32(_proxyId));
         Ghotique ghotiqueVault = Ghotique(payable(newMirror));
         ghotiqueVault.initialize(name, symbol, _gho, msg.sender, owners, numConfirmationsRequired);
