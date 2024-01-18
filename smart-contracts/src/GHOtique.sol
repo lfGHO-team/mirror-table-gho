@@ -7,7 +7,7 @@ import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {MultiSigWallet} from "./MultiSig.sol";
 
 
-contract Ghotique is ERC4626Upgradeable, OwnableUpgradeable,  MultiSigWallet {
+contract Ghotique is ERC4626Upgradeable, MultiSigWallet {
 
  
     mapping(address => uint256) public shareHolder;
@@ -31,7 +31,6 @@ contract Ghotique is ERC4626Upgradeable, OwnableUpgradeable,  MultiSigWallet {
     ) public initializer {
         __ERC4626_init(IERC20(asset_));
         __ERC20_init_unchained(name_, symbol_);
-        __Ownable_init(vaultOwner);
         __Multisig_init_unchained(owners, numConfirmationsRequired);
     }
 

@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.20;
 
-import {OwnableUpgradeable } from "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
+import {Initializable} from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 
-contract MultiSigWallet is OwnableUpgradeable {
+contract MultiSigWallet is Initializable {
     event DepositNative(address indexed sender, uint amount, uint balance);
     event SubmitTransaction(
         address indexed owner,
@@ -40,6 +40,11 @@ contract MultiSigWallet is OwnableUpgradeable {
 
     modifier notExecuted(uint _txIndex) {
         require(!transactions[_txIndex].executed, "tx already executed");
+        _;
+    }
+
+    modifier onlySigners() {
+        require(isOwner[msg.sender], "not owner");
         _;
     }
 
@@ -81,7 +86,7 @@ contract MultiSigWallet is OwnableUpgradeable {
         address _to,
         uint _value,
         bytes memory _data
-    ) public onlyOwner {
+    ) public onlySigners {
         uint txIndex = transactions.length;
 
         transactions.push(
@@ -99,7 +104,7 @@ contract MultiSigWallet is OwnableUpgradeable {
 
     function confirmTransaction(
         uint _txIndex
-    ) public onlyOwner txExists(_txIndex) notExecuted(_txIndex) notConfirmed(_txIndex) {
+    ) public onlySigners txExists(_txIndex) notExecuted(_txIndex) notConfirmed(_txIndex) {
         Transaction storage transaction = transactions[_txIndex];
         transaction.numConfirmations += 1;
         isConfirmed[_txIndex][msg.sender] = true;
@@ -109,7 +114,7 @@ contract MultiSigWallet is OwnableUpgradeable {
 
     function executeTransaction(
         uint _txIndex
-    ) public onlyOwner txExists(_txIndex) notExecuted(_txIndex) {
+    ) public onlySigners txExists(_txIndex) notExecuted(_txIndex) {
         Transaction storage transaction = transactions[_txIndex];
 
         require(
@@ -129,7 +134,7 @@ contract MultiSigWallet is OwnableUpgradeable {
 
     function revokeConfirmation(
         uint _txIndex
-    ) public onlyOwner txExists(_txIndex) notExecuted(_txIndex) {
+    ) public onlySigners txExists(_txIndex) notExecuted(_txIndex) {
         Transaction storage transaction = transactions[_txIndex];
 
         require(isConfirmed[_txIndex][msg.sender], "tx not confirmed");

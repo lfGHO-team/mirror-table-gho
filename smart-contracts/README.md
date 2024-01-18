@@ -1,4 +1,5 @@
-# Foundry Template
+# GHOtique Vaults
+![Alt text](image-1.png)
 
 ## Instructions.
 Assuming you already have Rust and Foundry installed.
