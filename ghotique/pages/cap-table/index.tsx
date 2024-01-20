@@ -34,9 +34,7 @@ const CreateCapTable = () => {
 
     const call = async () => {
         try {
-            const formattedNumConfirmationsRequired = parseInt(numConfirmationsRequired);
-            const formattedInitialInvestment = parseFloat(minInitialInvestment); // Or use a BigNumber library if needed
-            const data = await createNewMirrorTable({ args: [companyName, ticker, signers, numConfirmationsRequired, minInitialInvestment] });
+            const data = await createNewMirrorTable({ args: [companyName, ticker, signers, numConfirmationsRequired, `${minInitialInvestment}000000000000000000`] });
             console.info("contract call successs", data);
             toast.success("Cap table created!");
         } catch (err) {
@@ -113,12 +111,12 @@ const CreateCapTable = () => {
                     ))}
                 </motion.div>
                 <motion.div variants={childVariants} className="mb-4 space-y-2">
-                    <label htmlFor="multisigConfirmations" className="text-sm">Initial number of multisig confirmations</label>
+                    <label htmlFor="multisigConfirmations" className="text-sm">Minimum number of multisig confirmations</label>
                     <motion.input variants={childVariants} id="multisigConfirmations" type="text" className="w-full p-2 bg-[#0b111b] border border-[#D1D5DB] rounded-lg" value={numConfirmationsRequired}
                         onChange={(e) => setNumConfirmationsRequired(e.target.value)} />
                 </motion.div>
                 <motion.div variants={childVariants} className="mb-4 space-y-2">
-                    <label htmlFor="minInitialInvestment" className="text-sm">Initial investment</label>
+                    <label htmlFor="minInitialInvestment" className="text-sm">Initial investment (in USD)</label>
                     <motion.input variants={childVariants} id="minInitialInvestment" type="text" className="w-full p-2 bg-[#0b111b] border border-[#D1D5DB] rounded-lg"
                         value={minInitialInvestment}
                         onChange={(e) => setMinInitialInvestment(e.target.value)} />
