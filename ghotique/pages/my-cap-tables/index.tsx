@@ -36,12 +36,12 @@ const CreateCapTable = () => {
         try {
             const formattedNumConfirmationsRequired = parseInt(numConfirmationsRequired);
             const formattedInitialInvestment = parseFloat(minInitialInvestment); // Or use a BigNumber library if needed
+
+
             const data = await createNewMirrorTable({ args: [companyName, ticker, signers, numConfirmationsRequired, minInitialInvestment] });
             console.info("contract call successs", data);
-            toast.success("Cap table created!");
         } catch (err) {
             console.error("contract call failure", err);
-            toast.error("Contract call failed");
         }
     }
 
@@ -85,50 +85,29 @@ const CreateCapTable = () => {
             >
                 <motion.div variants={childVariants} className="mb-4 space-y-2">
                     <label htmlFor="companyName" className="text-sm">Company name</label>
-                    <motion.input variants={childVariants} id="companyName" type="text" className="w-full p-2 bg-[#0b111b] border border-[#D1D5DB] rounded-lg" value={companyName}
-                        onChange={(e) => setCompanyName(e.target.value)} />
+                    <motion.input variants={childVariants} id="companyName" type="text" className="w-full p-2 bg-[#0b111b] border border-[#D1D5DB] rounded-lg" />
                 </motion.div>
                 <motion.div variants={childVariants} className="mb-4 space-y-2">
-                    <label htmlFor="ticket" className="text-sm">Ticker (3-4 letters)</label>
-                    <motion.input variants={childVariants} id="ticker" type="text" className="w-full p-2 bg-[#0b111b] border border-[#D1D5DB] rounded-lg" value={ticker}
-                        onChange={(e) => setTicker(e.target.value)} />
+                    <label htmlFor="companyName" className="text-sm">Ticker (3-4 letters)</label>
+                    <motion.input variants={childVariants} id="ticker" type="text" className="w-full p-2 bg-[#0b111b] border border-[#D1D5DB] rounded-lg" />
                 </motion.div>
                 <motion.div variants={childVariants} className="mb-4 space-y-2">
-                    <label htmlFor="multisigSigners" className="text-sm">Initial multisig signers</label>
-                    {signers.map((signer, index) => (
-                        <div key={index} className="flex items-center space-x-2 mb-2">
-                            <motion.input
-                                variants={childVariants}
-                                type="text"
-                                value={signer}
-                                onChange={(e) => handleSignerChange(index, e)}
-                                className="w-full p-2 bg-[#0b111b] border border-[#D1D5DB] rounded-lg"
-                            />
-                            {index === signers.length - 1 && (
-                                <button onClick={addSigner} className="p-2 text-white bg-blue-500 rounded">
-                                    +
-                                </button>
-                            )}
-                        </div>
-                    ))}
+                    <label htmlFor="companyName" className="text-sm">Initial multisig signers</label>
+                    <motion.input variants={childVariants} id="multisigSigners" type="text" className="w-full p-2 bg-[#0b111b] border border-[#D1D5DB] rounded-lg" />
                 </motion.div>
                 <motion.div variants={childVariants} className="mb-4 space-y-2">
-                    <label htmlFor="multisigConfirmations" className="text-sm">Initial number of multisig confirmations</label>
-                    <motion.input variants={childVariants} id="multisigConfirmations" type="text" className="w-full p-2 bg-[#0b111b] border border-[#D1D5DB] rounded-lg" value={numConfirmationsRequired}
-                        onChange={(e) => setNumConfirmationsRequired(e.target.value)} />
+                    <label htmlFor="companyName" className="text-sm">Initial number of multisig confirmations</label>
+                    <motion.input variants={childVariants} id="multisigConfirmations" type="text" className="w-full p-2 bg-[#0b111b] border border-[#D1D5DB] rounded-lg" />
                 </motion.div>
                 <motion.div variants={childVariants} className="mb-4 space-y-2">
-                    <label htmlFor="minInitialInvestment" className="text-sm">Initial investment</label>
-                    <motion.input variants={childVariants} id="minInitialInvestment" type="text" className="w-full p-2 bg-[#0b111b] border border-[#D1D5DB] rounded-lg"
-                        value={minInitialInvestment}
-                        onChange={(e) => setMinInitialInvestment(e.target.value)} />
+                    <label htmlFor="companyName" className="text-sm">Initial investment</label>
+                    <motion.input variants={childVariants} id="initialInvestment" type="text" className="w-full p-2 bg-[#0b111b] border border-[#D1D5DB] rounded-lg" />
                 </motion.div>
 
                 <motion.button
                     variants={childVariants}
                     className="text-white border border-white rounded-2xl px-6 py-2 hover:bg-[#101827] text-sm md:text-base font-light mx-auto mt-2"
-                    onClick={call}
-                    disabled={isLoading}
+                    onClick={() => toast.info("Coming soon!")}
                 >
                     Create cap table
                 </motion.button>
