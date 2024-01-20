@@ -1,7 +1,9 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 import { toast } from 'sonner';
-import { FaLongArrowAltRight } from 'react-icons/fa';
+import { FaArrowRight, FaLongArrowAltRight } from 'react-icons/fa';
+import { FaRegCopy } from "react-icons/fa";
+import { useContract, useContractWrite } from '@thirdweb-dev/react';
 
 const containerVariants = {
     initial: {
@@ -21,6 +23,40 @@ const childVariants = {
 };
 
 const IssueEquity = () => {
+    const [companyName, setCompanyName] = useState('');
+    const [agreementType, setAgreementType] = useState('');
+    const [investmentAmount, setInvestmentAmount] = useState('');
+    const [investorsAddress, setInvestorsAddress] = useState('');
+    const [receiversAddress, setReceiversAddress] = useState('');
+    const [amountOfShares, setAmountOfShares] = useState('');
+    const [generatedLink, setGeneratedLink] = useState('');
+    const [open, setOpen] = useState(false);
+
+    const { contract } = useContract("0x561a39ec91c6baac2f7b704ce2655eaca9793a0c");
+    const { mutateAsync: addInvestor, isLoading } = useContractWrite(contract, "addInvestor")
+
+    const call = async () => {
+        try {
+            const data = await addInvestor({ args: [investorsAddress] });
+            console.info("contract call successs", data);
+        } catch (err) {
+            console.error("contract call failure", err);
+        }
+    }
+
+    const generateLink = () => {
+        const queryParams = new URLSearchParams({
+            companyName: encodeURIComponent(companyName),
+            agreementType: encodeURIComponent(agreementType),
+            investmentAmount: encodeURIComponent(investmentAmount),
+            investorsAddress: encodeURIComponent(investorsAddress),
+        }).toString();
+
+        const link = `https://ghothique.vercel.app/invest?${queryParams}`;
+        setGeneratedLink(link);
+    };
+
+
     return (
         <>
             <motion.div
@@ -56,36 +92,89 @@ const IssueEquity = () => {
             >
                 <motion.div variants={childVariants} className="mb-4 space-y-2">
                     <label htmlFor="companyName" className="text-sm">Company name</label>
-                    <motion.input variants={childVariants} id="companyName" type="text" className="w-full p-2 bg-[#0b111b] border border-[#D1D5DB] rounded-lg" />
+                    <motion.input variants={childVariants} id="companyName" type="text" className="w-full p-2 bg-[#0b111b] border border-[#D1D5DB] rounded-lg"
+                        value={companyName}
+                        onChange={(e) => setCompanyName(e.target.value)}
+                    />
                 </motion.div>
                 <motion.div variants={childVariants} className="mb-4 space-y-2">
-                    <label htmlFor="companyName" className="text-sm">Agreement type</label>
-                    <motion.input variants={childVariants} id="agreementType" type="text" className="w-full p-2 bg-[#0b111b] border border-[#D1D5DB] rounded-lg" />
+                    <label htmlFor="agreementType" className="text-sm">Agreement type</label>
+                    <motion.input variants={childVariants} id="agreementType" type="select" className="w-full p-2 bg-[#0b111b] border border-[#D1D5DB] rounded-lg"
+                        value={agreementType}
+                        onChange={(e) => setAgreementType(e.target.value)}
+                    />
                 </motion.div>
                 <motion.div variants={childVariants} className="mb-4 space-y-2">
-                    <label htmlFor="companyName" className="text-sm">Investment amount</label>
-                    <motion.input variants={childVariants} id="investmentAmount" type="text" className="w-full p-2 bg-[#0b111b] border border-[#D1D5DB] rounded-lg" />
+                    <label htmlFor="investmentAmount" className="text-sm">Investment amount (in GHO)</label>
+                    <motion.input variants={childVariants} id="investmentAmount" type="text" className="w-full p-2 bg-[#0b111b] border border-[#D1D5DB] rounded-lg"
+                        value={investmentAmount}
+                        onChange={(e) => setInvestmentAmount(e.target.value)}
+                    />
                 </motion.div>
                 <motion.div variants={childVariants} className="mb-4 space-y-2">
-                    <label htmlFor="companyName" className="text-sm">Inverstor&apos;s address</label>
-                    <motion.input variants={childVariants} id="investorsAddress" type="text" className="w-full p-2 bg-[#0b111b] border border-[#D1D5DB] rounded-lg" />
+                    <label htmlFor="investorsAddress" className="text-sm">Inverstor&apos;s address</label>
+                    <motion.input variants={childVariants} id="investorsAddress" type="text" className="w-full p-2 bg-[#0b111b] border border-[#D1D5DB] rounded-lg"
+                        value={investorsAddress}
+                        onChange={(e) => setInvestorsAddress(e.target.value)}
+                    />
+                </motion.div>
+                {/* <motion.div variants={childVariants} className="mb-4 space-y-2">
+                    <label htmlFor="receiversAddress" className="text-sm">Receiver&apos;s addess (project&apos;s wallet address)</label>
+                    <motion.input variants={childVariants} id="receiversAddress" type="text" className="w-full p-2 bg-[#0b111b] border border-[#D1D5DB] rounded-lg"
+                        value={investorsAddress}
+                        disabled
+                    />
                 </motion.div>
                 <motion.div variants={childVariants} className="mb-4 space-y-2">
-                    <label htmlFor="companyName" className="text-sm">Receiver&apos;s addess (project&apos;s wallet address)</label>
-                    <motion.input variants={childVariants} id="receiversAddress" type="text" className="w-full p-2 bg-[#0b111b] border border-[#D1D5DB] rounded-lg" />
-                </motion.div>
-                <motion.div variants={childVariants} className="mb-4 space-y-2">
-                    <label htmlFor="companyName" className="text-sm">Amount of shares</label>
-                    <motion.input variants={childVariants} id="amountOfShares" type="number" className="w-full p-2 bg-[#0b111b] border border-[#D1D5DB] rounded-lg" />
-                </motion.div>
+                    <label htmlFor="amountOfShares" className="text-sm">Amount of shares</label>
+                    <motion.input variants={childVariants} id="amountOfShares" type="number" className="w-full p-2 bg-[#0b111b] border border-[#D1D5DB] rounded-lg"
+                        value={amountOfShares}
+                        onChange={(e) => setAmountOfShares(e.target.value)}
+                    />
+                </motion.div> */}
                 <motion.button
                     variants={childVariants}
                     className="text-white border border-white rounded-2xl px-6 py-2 hover:bg-[#101827] text-sm md:text-base font-light mx-auto mt-2"
-                    onClick={() => toast.info("Coming soon!")}
+                    onClick={() => {
+                        generateLink()
+                        setOpen(true)
+                    }
+                    }
                 >
                     Generate link
                 </motion.button>
             </motion.div>
+            <AnimatePresence>
+
+                {
+                    open &&
+                    // modal with generated link with copy icon
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.2 }}
+                        tabIndex={-1}
+                        className='fixed inset-0 bg-[#6E6E6E4D] bg-opacity-50 flex items-center justify-center z-50 px-6 md:px-0 '>
+                        <div
+                            className={`p-6 z-50 bg-[#0B111B] rounded-3xl md:py-8 relative max-w-lg`}>
+                            <h3 className="text-lg leading-6 font-medium text-white md:text-3xl text-center mb-8">Link generated</h3>
+                            <p className='text-sm text-[#A1A1AA] text-center'>Share the link with the investor to receive the payment</p>
+                            <div className="flex items-center justify-between mt-4 space-x-2 border rounded-2xl p-2 w-full">
+                                <p className='text-sm text-white overflow-x-scroll'>{generatedLink}</p>
+                                <FaRegCopy color='white' size={28}
+                                    onClick={() => { navigator.clipboard.writeText(generatedLink); toast.success('Copied to clipboard!') }}
+                                    className='cursor-pointer'
+                                />
+                            </div>
+                            <div className='w-full flex justify-center mt-4 items-center space-x-2'>
+                                <button className='text-white text-center font-light' onClick={() => setOpen(false)}>Done</button>
+                                <FaArrowRight color='white' size={14} />
+                            </div>
+                        </div>
+                    </motion.div>
+                }
+            </AnimatePresence>
         </>
     );
 };

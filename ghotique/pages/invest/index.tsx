@@ -9,6 +9,9 @@ import { useParams } from 'next/navigation'
 
 const Invest = () => {
 
+    const router = useRouter();
+    const { companyName, agreementType, investmentAmount, investorsAddress } = router.query;
+
     const { isConnected, address } = useAccount()
     const { contract } = useContract("0x561a39ec91c6baac2f7b704ce2655eaca9793a0c");
     const { data: isAccreditedInvestor, isLoading } = useContractRead(contract, "accreditedInvestor", [address])
@@ -44,9 +47,12 @@ const Invest = () => {
     return (
         <>
             <main
-                className={`flex min-h-[70dvh] flex-col justify-center w-full bg-[#0b111b] p-6`}
+                className={`flex min-h-[70dvh] flex-col justify-center w-full bg-[#0b111b] p-6 space-y-8 md:px-12`}
             >
-                <div className="border border-[#27272A] p-6 text-white max-w-2xl mx-auto rounded-lg shadow-md overflow-scroll">
+                <h2 className='text-3xl text-white'>
+                    Investor Portal
+                </h2>
+                <div className="border border-[#27272A] p-6 text-white max-w-2xl rounded-lg shadow-md overflow-scroll">
                     <h1 className="text-2xl mb-4">Investment form</h1>
                     <p className="mb-4 text-[#A1A1AA]">
                         {`Confirm the details of the investment and click "Send funds" to confirm the transaction. Once the transaction is recorded, you will receive your equity on-chain assets to the connected wallet.`}
@@ -55,22 +61,22 @@ const Invest = () => {
                         <div className="flex flex-col md:flex-row justify-between">
                             <span>Sending
                                 funds to</span>
-                            <span>companyaoain.eth</span>
+                            <span>{companyName}</span>
                         </div>
                         <div className="flex flex-col md:flex-row justify-between">
                             <span>Amount</span>
                             <div className="flex items-center space-x-2">
-                                <span>100 GHO</span>
+                                <span>{investmentAmount} GHO</span>
                                 <Image src={gho} width={20} height={20} alt="gho" className='rounded-full' />
                             </div>
                         </div>
                         <div className="flex flex-col md:flex-row justify-between">
                             <span>Shares to be received</span>
-                            <span>12,000</span>
+                            <span>{investmentAmount}</span>
                         </div>
                         <div className="flex flex-col md:flex-row justify-between">
                             <span>Receiver&apos;s wallet address</span>
-                            <span>{address}</span>
+                            <span>{investorsAddress}</span>
                         </div>
                     </div>
                     <button

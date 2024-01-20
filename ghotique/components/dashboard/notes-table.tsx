@@ -7,7 +7,11 @@ const TableData = [
     { investor: 'antcapital.eth', round: ['Seed', 'A', 'B'], shares: '420,000', ownership: '12%' },
 ];
 
-const NotesTable = () => {
+type NotesTableProps = {
+    investors: string[];
+}
+
+const NotesTable = ({ investors }: NotesTableProps) => {
     return (
         <div className="border border-[#27272A] text-white p-6 rounded-xl shadow-lg">
             <h2 className="text-xl font-semibold mb-4">Latest issued notes links</h2>
