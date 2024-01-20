@@ -1,3 +1,4 @@
+import React from 'react';
 import '../styles/globals.css';
 import type { AppProps } from 'next/app';
 import { WagmiConfig, createConfig } from 'wagmi';
@@ -5,6 +6,9 @@ import { mainnet, polygon, optimism, arbitrum } from 'wagmi/chains';
 import { ConnectKitProvider, getDefaultConfig } from 'connectkit';
 import Layout from '@/components/layout';
 import { Toaster } from 'sonner'
+import { Sepolia } from "@thirdweb-dev/chains";
+import { ThirdwebProvider } from "@thirdweb-dev/react";
+
 
 const config = createConfig(
   getDefaultConfig({
@@ -19,21 +23,27 @@ const config = createConfig(
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <WagmiConfig config={config}>
-      <ConnectKitProvider theme="midnight"
-        customTheme={{
-          "--ck-font-family": '"Comic Sans MS", "Comic Sans", cursive',
-          "--ck-connectbutton-font-size": "14px",
-          "--ck-connectbutton-background": "#0b111b",
-          "--ck-connectbutton-hover-background": "#101827",
-          "--ck-body-background": "#0b111b"
-        }}
+      <ThirdwebProvider
+        activeChain={Sepolia}
+        clientId={process.env.NEXT_PUBLIC_PROJECT_ID}
       >
-        <Layout>
-          <Toaster richColors />
-          <Component {...pageProps} />
-        </Layout>
-      </ConnectKitProvider>
+        <ConnectKitProvider theme="midnight"
+          customTheme={{
+            "--ck-font-family": '"Comic Sans MS", "Comic Sans", cursive',
+            "--ck-connectbutton-font-size": "14px",
+            "--ck-connectbutton-background": "#0b111b",
+            "--ck-connectbutton-hover-background": "#101827",
+            "--ck-body-background": "#0b111b"
+          }}
+        >
+          <Layout>
+            <Toaster richColors />
+            <Component {...pageProps} />
+          </Layout>
+        </ConnectKitProvider>
+      </ThirdwebProvider>
     </WagmiConfig>
+
   );
 }
 

@@ -1,6 +1,8 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { toast } from 'sonner';
+import { ThirdwebSDK } from "@thirdweb-dev/sdk";
+import { Sepolia } from "@thirdweb-dev/chains";
 
 const containerVariants = {
     initial: {
@@ -20,6 +22,25 @@ const childVariants = {
 };
 
 const CreateCapTable = () => {
+
+    const sdk = new ThirdwebSDK(Sepolia, {
+        clientId: process.env.NEXT_PUBLIC_PROJECT_ID!,
+    });
+
+
+
+    const createCapTable = async () => {
+        // Define the async function inside useEffect
+        const fetchContract = async () => {
+            const contract = await sdk.getContract("0x0a2161b64f10a93f7744fd3fb2e132d0b3c19930");
+            console.log(contract);
+        };
+
+        // Call the async function
+        fetchContract();
+    }; // Dependencies array
+
+
     return (
         <>
             <motion.div
@@ -74,7 +95,6 @@ const CreateCapTable = () => {
                 >
                     Create cap table
                 </motion.button>
-
             </motion.div>
         </>
     );
