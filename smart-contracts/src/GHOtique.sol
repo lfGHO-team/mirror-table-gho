@@ -9,9 +9,8 @@ import {MultiSigWallet} from "./MultiSig.sol";
 
 contract Ghotique is ERC4626Upgradeable, MultiSigWallet {
 
- 
-    mapping(address => uint256) public shareHolder;
     mapping(address => bool) public accreditedInvestor;
+    address[] private _investors;
 
     event InvestorAdded(address indexed investor);
     event InvestorRemoved(address indexed investor);
@@ -70,8 +69,6 @@ contract Ghotique is ERC4626Upgradeable, MultiSigWallet {
         if (assets > maxAssets) {
             revert ERC4626ExceededMaxDeposit(receiver, assets, maxAssets);
         }
-        // Increase the share of the user
-        shareHolder[msg.sender] += assets;
         uint256 shares = previewDeposit(assets);
         _deposit(_msgSender(), receiver, assets, shares);
 
@@ -79,14 +76,12 @@ contract Ghotique is ERC4626Upgradeable, MultiSigWallet {
     }
 
     function redeem(uint256 shares, address receiver, address owner) public override returns (uint256) {
-        require(shareHolder[msg.sender] > 0, "Not a share holder");
         uint256 maxShares = maxRedeem(owner);
         if (shares > maxShares) {
             revert ERC4626ExceededMaxRedeem(owner, shares, maxShares);
         }
 
         uint256 assets = previewRedeem(shares);
-        shareHolder[msg.sender] -= assets;
         _withdraw(_msgSender(), receiver, owner, assets, shares);
 
         return assets;
@@ -104,6 +99,18 @@ contract Ghotique is ERC4626Upgradeable, MultiSigWallet {
         return assets;
     }
 
+    function getAuthorizedInvestors() public view returns (address[] memory) {
+        address[] memory investorsAndOwners = new address[](_investors.length + owners.length);
 
+        for (uint i = 0; i < _investors.length; i++) {
+            investorsAndOwners[i] = _investors[i];
+        }
+
+        for (uint i = 0; i < owners.length; i++) {
+            investorsAndOwners[i + _investors.length] = owners[i];
+        }
+
+        return investorsAndOwners;
+    }
 }
 

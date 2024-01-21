@@ -16,6 +16,8 @@ contract GHOtiqueFactory is Ownable {
     address private _implementation;
     address private _gho;
 
+    mapping(address => address[]) private _investorToVaults;
+
     event ProxyCreated(address proxy);
 
     constructor (
@@ -44,6 +46,7 @@ contract GHOtiqueFactory is Ownable {
         Ghotique ghotiqueVault = Ghotique(payable(newMirror));
         ghotiqueVault.initialize(name, symbol, _gho, owners, numConfirmationsRequired, minInitialInvestment);
         _proxyId++;
+        _investorToVaults[msg.sender].push(newMirror);
 
         emit ProxyCreated(newMirror);
 
@@ -69,5 +72,9 @@ contract GHOtiqueFactory is Ownable {
 
     function getImplementation() external view returns (address) {
         return _implementation;
+    }
+
+    function getInvestorVaults(address investor) external view returns (address[] memory) {
+        return _investorToVaults[investor];
     }
 }
