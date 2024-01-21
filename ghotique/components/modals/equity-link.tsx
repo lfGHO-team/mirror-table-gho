@@ -39,7 +39,6 @@ const EquityLink = ({ onClose, vault }: EquityLinkProps) => {
             tabIndex={-1}
             className='fixed inset-0 bg-[#6E6E6E4D] bg-opacity-50 flex items-center justify-center z-50 px-6 md:px-0'>
             <div
-
                 onClick={(e) => e.stopPropagation()} // Prevent click through to the background
                 className={`p-6 z-50 bg-[#0B111B] rounded-3xl md:py-8 md:px-24`}>
                 <div className="space-y-8 w-full flex flex-col items-center">

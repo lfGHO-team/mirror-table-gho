@@ -171,7 +171,16 @@ const IssueEquity = () => {
                             onClick={call
                             }
                         >
-                            Add investor
+                            {isLoading ? (
+                                <div className='flex items-center space-x-2'>
+                                    <span>
+                                        Adding investor
+                                    </span>
+                                    <div className="spinner"></div>
+                                </div>
+                            ) : (
+                                "Add investor"
+                            )}
                         </motion.button>
                 }
             </motion.div>

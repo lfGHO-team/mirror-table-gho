@@ -114,15 +114,34 @@ const Invest = () => {
                             <button
                                 className="text-white font-bold py-2 px-4 rounded-lg border"
                                 onClick={callApprove}
+                                disabled={approveIsLoading}
                             >
-                                Approve GHO
+                                {approveIsLoading ? (
+                                    <div className='flex items-center space-x-2'>
+                                        <span>
+                                            Appoving
+                                        </span>
+                                        <div className="spinner"></div>
+                                    </div>
+                                ) : (
+                                    "Approve GHO"
+                                )}
                             </button>
                             :
                             <button
                                 className=" text-white font-bold py-2 px-4 rounded"
                                 onClick={call}
                             >
-                                Send funds →
+                                {isLoading ? (
+                                    <div className='flex items-center space-x-2'>
+                                        <span>
+                                            Depositing
+                                        </span>
+                                        <div className="spinner"></div>
+                                    </div>
+                                ) : (
+                                    "Deposit funds"
+                                )}
                             </button>
                     }
                 </div>

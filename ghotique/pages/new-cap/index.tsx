@@ -160,7 +160,8 @@ const CreateCapTable = () => {
 
                 {
                     ghoAllowance < minInitialInvestment ?
-                        <button
+                        <motion.button
+                            variants={childVariants}
                             className="text-white font-bold py-2 px-4 rounded-lg border"
                             onClick={callApprove}
                             disabled={!isFormValid() || approveIsLoading}
@@ -175,7 +176,7 @@ const CreateCapTable = () => {
                             ) : (
                                 "Approve GHO"
                             )}
-                        </button>
+                        </motion.button>
                         :
                         <motion.button
                             variants={childVariants}
