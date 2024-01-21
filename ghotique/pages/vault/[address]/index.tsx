@@ -112,10 +112,10 @@ const CapTable = () => {
                             <p className='text-lg text-[#A1A1AA]'>Total funding received</p>
                             {
                                 isOwner ?
-                                    <div className="flex flex-col md:absolute top-2 right-8">
+                                    <div className="flex flex-col md:absolute top-16 right-8">
                                         <Link href={`/withdraw-funds/${vault}`} className='w-full text-center'>
                                             <motion.button
-                                                className="text-white border border-white rounded-2xl px-6 py-2 hover:bg-[#101827] text-sm md:text-base font-light mt-2"
+                                                className="text-white border border-white rounded-2xl px-6 py-2 hover:bg-[#101827] text-sm md:text-base font-light md:mt-1 w-full"
                                                 disabled={isLoading}
                                             >
                                                 Withdraw
@@ -128,7 +128,7 @@ const CapTable = () => {
                             }
                             {
                                 balance > .1 ?
-                                    <div className="flex items-center">
+                                    <div className="flex items-center md:absolute top-2 right-8">
                                         <Link href={`/exit-investment/${vault}`} className='w-full text-center'>
                                             <motion.div
                                                 className="text-white border border-white rounded-2xl px-6 py-2 hover:bg-[#101827] text-sm md:text-base font-light mx-auto mt-2"
