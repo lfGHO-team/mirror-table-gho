@@ -37,6 +37,7 @@ const CapTable = () => {
     console.log("balance of: ", balanceOf)
     // parse from BigNumber _hex
     const balance = parseInt(balanceOf?._hex) / 1000000000000000000
+    console.log("balance: ", balance)
 
 
     useEffect(() => {
@@ -120,25 +121,25 @@ const CapTable = () => {
                                                 Withdraw
                                             </motion.button>
                                         </Link>
-                                        {
-                                            balance > .1 ?
-                                                <div className="flex items-center">
-                                                    <Link href={`/exit-investment/${vault}`} className='w-full text-center'>
-                                                        <motion.div
-                                                            className="text-white border border-white rounded-2xl px-6 py-2 hover:bg-[#101827] text-sm md:text-base font-light mx-auto mt-2"
-                                                        >
-                                                            Exit investment
-                                                        </motion.div>
-                                                    </Link>
-                                                </div>
-                                                :
-                                                null
-                                        }
+
                                     </div>
                                     :
                                     null
                             }
-
+                            {
+                                balance > .1 ?
+                                    <div className="flex items-center">
+                                        <Link href={`/exit-investment/${vault}`} className='w-full text-center'>
+                                            <motion.div
+                                                className="text-white border border-white rounded-2xl px-6 py-2 hover:bg-[#101827] text-sm md:text-base font-light mx-auto mt-2"
+                                            >
+                                                Exit investment
+                                            </motion.div>
+                                        </Link>
+                                    </div>
+                                    :
+                                    null
+                            }
                         </div>
                         <div className="flex">
                             <Image src={pie} width={250} height={250} alt='pie chart' />
