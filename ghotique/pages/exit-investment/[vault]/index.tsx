@@ -1,7 +1,8 @@
-import { useContract, useContractRead } from '@thirdweb-dev/react';
+import { useContract, useContractRead, useContractWrite } from '@thirdweb-dev/react';
 import Head from 'next/head'
 import { useRouter } from 'next/router';
 import React, { useState } from 'react'
+import { toast } from 'sonner';
 import { useAccount } from 'wagmi'
 
 const ExitPosition = () => {
@@ -36,6 +37,23 @@ const ExitPosition = () => {
     const isActiveCircle = (value: number) => {
         return sliderValue >= value ? 'active-circle' : 'inactive-circle';
     };
+
+    const { mutateAsync: redeem, isLoading: redeemIsLoading } = useContractWrite(contract, "redeem")
+
+    const call = async () => {
+        try {
+            toast.loading('Redeeming funds...', { duration: 3000 })
+            const data = await redeem({ args: [`${Number(receiveAmount).toFixed(0)}000000000000000000`, address, address] });
+            console.info("contract call successs", data);
+            toast.success('Funds redeemed!', { duration: 2000 })
+        } catch (err) {
+            console.error("contract call failure", err);
+        }
+    }
+
+    if (redeemIsLoading) {
+        toast.loading('Redeeming funds...', { duration: 3000 })
+    }
 
     return (
         <>
@@ -117,11 +135,11 @@ const ExitPosition = () => {
 
                         <div className="flex flex-col md:flex-row justify-between">
                             <span>Exit and receive funds</span>
-                            <span>{receiveAmount.toFixed(2)} GHO</span> {/* Format the amount to two decimal places */}
+                            <span>{receiveAmount.toFixed(0)} GHO</span> {/* Format the amount to two decimal places */}
                         </div>
                         <button
                             className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                            onClick={() => {/* Add logic to handle fund sending */ }}
+                            onClick={call}
                         >
                             Send funds →
                         </button>

@@ -7,6 +7,7 @@ import pie from "../assets/icons/pie.svg"
 import wallet from "../assets/icons/wallet.svg"
 import alice from "../assets/icons/alice.png"
 import { toast } from 'sonner'
+import Link from 'next/link'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -27,12 +28,12 @@ const Home = () => {
           <h1 className='text-white text-2xl md:text-[50px] font-bold'>Investments made simple</h1>
           <h2 className='text-white text-lg md:text-[28px] font-light'>Own your cap table on-chain</h2>
         </div>
-        <button
+        <Link
+          href='/dashboard'
           className="text-white border border-white rounded-2xl px-6 py-2 hover:bg-[#101827] text-sm md:text-lg font-light"
-          onClick={() => toast.info("Coming soon!")}
         >
           Start for free
-        </button>
+        </Link>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
           <div className='bg-[#232932] rounded-3xl w-full p-6 space-y-4 md:pr-24'>
             <Image src={pie} width={75} height={75} alt='pie chart' />

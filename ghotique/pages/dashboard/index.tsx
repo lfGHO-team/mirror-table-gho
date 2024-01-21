@@ -23,7 +23,7 @@ const CapTable = () => {
     return (
         <>
             <Head>
-                <title>My Cap Tables</title>
+                <title>Dashboard</title>
                 <meta name="description" content="Investments made simple" />
                 <meta name="keywords" content="investments, cap table, capitalization table" />
                 <meta property="og:title" content="Ghothique" />
@@ -35,10 +35,10 @@ const CapTable = () => {
                 {
                     isLoading && <div>HOLAAA</div>
                 }
-                <div className="flex gap-4">
+                <div className="flex gap-4 flex-col md:flex-row overflow-scroll">
                     {data && data.map((item: any, index: number) => (
                         <>
-                            <Link href={`/dashboard/${item}`} key={index} className='hover:bg-[#101827] hover:cursor-pointer flex'
+                            <Link href={`/vault/${item}`} key={index} className='hover:bg-[#101827] hover:cursor-pointer flex'
                             >
                                 <div className='border border-[#27272A] rounded-xl flex items-center text-white space-x-2 p-4 hover:bg-[#101827] hover:cursor-pointer'
                                 >
@@ -54,9 +54,9 @@ const CapTable = () => {
                             </Link>
                         </>
                     ))}
-                    <Link href={`/new-cap`} className='hover:bg-[#101827] hover:cursor-pointer flex'
+                    <Link href={`/new-cap`} className='hover:bg-[#101827] hover:cursor-pointer flex w-full'
                     >
-                        <div className='border border-[#27272A] rounded-xl flex items-center text-white space-x-2 p-4 hover:bg-[#101827] hover:cursor-pointer'
+                        <div className='border border-[#27272A] rounded-xl flex items-center text-white space-x-2 p-4 hover:bg-[#101827] hover:cursor-pointer w-full'
                         >
                             <div>
                                 <TbTable size={20} />
