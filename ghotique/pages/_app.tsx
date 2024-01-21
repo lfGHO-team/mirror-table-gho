@@ -12,7 +12,7 @@ import { ThirdwebProvider } from "@thirdweb-dev/react";
 
 const config = createConfig(
   getDefaultConfig({
-    appName: 'ConnectKit Next.js demo',
+    appName: 'Ghothique',
     alchemyId: process.env.NEXT_PUBLIC_ALCHEMY_ID,
     chains: [sepolia, mainnet, polygon, optimism, arbitrum],
     walletConnectProjectId: "e529e3d10c022978967188ab28b77b3f",

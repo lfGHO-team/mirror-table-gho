@@ -3,7 +3,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { toast } from 'sonner';
 import { FaArrowRight, FaLongArrowAltRight } from 'react-icons/fa';
 import { FaRegCopy } from "react-icons/fa";
-import { useContract, useContractRead, useContractWrite } from '@thirdweb-dev/react';
+import { Web3Button, useContract, useContractRead, useContractWrite } from '@thirdweb-dev/react';
 import { useRouter } from 'next/router';
 
 const containerVariants = {
@@ -165,23 +165,32 @@ const IssueEquity = () => {
                         >
                             Generate link
                         </motion.button> :
-                        <motion.button
-                            variants={childVariants}
-                            className="text-white border border-white rounded-2xl px-6 py-2 hover:bg-[#101827] text-sm md:text-base font-light mx-auto mt-2"
-                            onClick={call
-                            }
+                        // <motion.button
+                        //     variants={childVariants}
+                        //     className="text-white border border-white rounded-2xl px-6 py-2 hover:bg-[#101827] text-sm md:text-base font-light mx-auto mt-2"
+                        //     onClick={call
+                        //     }
+                        // >
+                        //     {isLoading ? (
+                        //         <div className='flex items-center space-x-2'>
+                        //             <span>
+                        //                 Adding investor
+                        //             </span>
+                        //             <div className="spinner"></div>
+                        //         </div>
+                        //     ) : (
+                        //         "Add investor"
+                        //     )}
+                        // </motion.button>
+                        <Web3Button
+                            contractAddress={vault as string}
+                            action={(contract) => {
+                                contract.call("addInvestor", [investorsAddress])
+                            }}
                         >
-                            {isLoading ? (
-                                <div className='flex items-center space-x-2'>
-                                    <span>
-                                        Adding investor
-                                    </span>
-                                    <div className="spinner"></div>
-                                </div>
-                            ) : (
-                                "Add investor"
-                            )}
-                        </motion.button>
+                            Add Investor
+                        </Web3Button>
+
                 }
             </motion.div>
             <AnimatePresence>
