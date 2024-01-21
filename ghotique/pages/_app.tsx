@@ -25,7 +25,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     <WagmiConfig config={config}>
       <ThirdwebProvider
         activeChain={Sepolia}
-        clientId={process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID}
+        clientId={process.env.NEXT_PUBLIC_PROJECT_ID as string}
       >
         <ConnectKitProvider theme="midnight"
           customTheme={{
