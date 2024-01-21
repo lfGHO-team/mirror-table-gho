@@ -3,7 +3,9 @@ import { motion } from 'framer-motion'
 import { toast } from 'sonner';
 import { ThirdwebSDK } from "@thirdweb-dev/sdk";
 import { Sepolia } from "@thirdweb-dev/chains";
-import { useContract, useContractWrite } from "@thirdweb-dev/react";
+import { useContract, useContractWrite, useContractRead } from "@thirdweb-dev/react";
+import { ethers } from 'ethers';
+import { useAccount } from 'wagmi';
 
 const containerVariants = {
     initial: {
@@ -23,6 +25,8 @@ const childVariants = {
 };
 
 const CreateCapTable = () => {
+
+    const { address } = useAccount();
     const [companyName, setCompanyName] = useState('');
     const [ticker, setTicker] = useState('');
     const [signers, setSigners] = useState(['']);
@@ -31,6 +35,28 @@ const CreateCapTable = () => {
 
     const { contract } = useContract("0x01759CC46Fbc6753D27689E411A67278f01805f7");
     const { mutateAsync: createNewMirrorTable, isLoading } = useContractWrite(contract, "createNewMirrorTable")
+
+
+    const { contract: ghoContract } = useContract("0xc4bf5cbdabe595361438f8c6a187bdc330539c60");
+    const { mutateAsync: approve, isLoading: approveIsLoading } = useContractWrite(ghoContract, "approve")
+    const { data: allowance, isLoading: allowanceIsLoading } = useContractRead(ghoContract, "allowance", [address, "0x01759CC46Fbc6753D27689E411A67278f01805f7"])
+    console.log("allowance: ", allowance)
+
+    const ghoAllowance = allowance ? ethers.utils.formatUnits(allowance, 18) : 0;
+    console.log("allowance: ", ghoAllowance)
+
+    const callApprove = async () => {
+        try {
+            toast.loading("Approving funds...")
+            const data = await approve({ args: ["0x01759CC46Fbc6753D27689E411A67278f01805f7", `${minInitialInvestment}000000000000000000`] });
+            console.info("contract call successs", data);
+            toast.success("Funds approved!");
+
+        } catch (err) {
+            console.error("contract call failure", err);
+            toast.error("Contract call failed");
+        }
+    }
 
     const call = async () => {
         try {
@@ -130,6 +156,28 @@ const CreateCapTable = () => {
                 >
                     Create cap table
                 </motion.button>
+                {
+                    ghoAllowance < minInitialInvestment ?
+                        <button
+                            className="text-white font-bold py-2 px-4 rounded-lg border"
+                            onClick={callApprove}
+                        >
+                            Approve GHO
+                        </button>
+                        :
+                        <motion.button
+                            variants={childVariants}
+                            className="text-white border border-white rounded-2xl px-6 py-2 hover:bg-[#101827] text-sm md:text-base font-light mx-auto mt-2"
+                            onClick={call}
+                            disabled={isLoading}
+                        >
+                            Send funds →
+                        </motion.button>
+                }
+                <p>
+                    allowance:
+                    {ghoAllowance}
+                </p>
             </motion.div>
         </>
     );

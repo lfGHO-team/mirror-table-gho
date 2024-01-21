@@ -11,7 +11,7 @@ import { ethers } from 'ethers'
 const Invest = () => {
 
     const router = useRouter();
-    const vault = router.query.vault;
+    const { vault } = router.query;
     const { companyName, companyAddress, agreementType, investmentAmount, investorsAddress } = router.query;
 
     const { isConnected, address } = useAccount()
@@ -24,10 +24,11 @@ const Invest = () => {
     const { mutateAsync: approve, isLoading: approveIsLoading } = useContractWrite(ghoContract, "approve")
 
     const { data: allowance, isLoading: allowanceIsLoading } = useContractRead(ghoContract, "allowance", [address, vault])
-    console.log("allowance: ", allowance)
+    console.log("big allowance: ", allowance)
 
     const ghoAllowance = allowance ? ethers.utils.formatUnits(allowance, 18) : 0;
     console.log("allowance: ", ghoAllowance)
+
 
 
 
@@ -36,26 +37,23 @@ const Invest = () => {
             toast.loading("Approving funds...")
             const data = await approve({ args: [vault, `${investmentAmount}000000000000000000`] });
             console.info("contract call successs", data);
-        } catch (err) {
-            console.error("contract call failure", err);
-            toast.error("Contract call failed");
-        } finally {
-
             toast.success("Funds approved!");
 
+        } catch (err) {
+            console.error("contract call failure", err);
+            toast.error("Approve GHO failed");
         }
     }
 
     const call = async () => {
         try {
             toast.loading("Sending funds...")
-            const data = await deposit({ args: [`${investmentAmount}000000000000000000`, address] });
+            const data = await deposit({ args: [`${investmentAmount}`, address] });
             console.info("contract call successs", data);
+            toast.success("Funds deposited!");
         } catch (err) {
             console.error("contract call failure", err);
-            toast.error("Contract call failed");
-        } finally {
-            toast.success("Funds deposited!");
+            toast.error("Deposit failed");
         }
     }
 
@@ -110,32 +108,24 @@ const Invest = () => {
                             <span>{investorsAddress}</span>
                         </div>
                     </div>
-                    <div>
-                        <p>
-                            allowance:
-                            {ghoAllowance}
-                        </p>
-                    </div>
-
                     {
                         investmentAmount &&
                             ghoAllowance < investmentAmount ?
                             <button
-                                className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                                className="text-white font-bold py-2 px-4 rounded-lg border"
                                 onClick={callApprove}
                             >
-                                Approve
+                                Approve GHO
                             </button>
                             :
                             <button
-                                className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                                className=" text-white font-bold py-2 px-4 rounded"
                                 onClick={call}
                             >
                                 Send funds →
                             </button>
                     }
                 </div>
-
             </main>
         </>
     )

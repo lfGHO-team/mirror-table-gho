@@ -134,14 +134,14 @@ const ExitPosition = () => {
                         </div>
 
                         <div className="flex flex-col md:flex-row justify-between">
-                            <span>Exit and receive funds</span>
+                            <span>Exit and receive:</span>
                             <span>{receiveAmount.toFixed(0)} GHO</span> {/* Format the amount to two decimal places */}
                         </div>
                         <button
                             className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                             onClick={call}
                         >
-                            Send funds →
+                            Redeem funds →
                         </button>
                     </div>
                 </div>

@@ -32,6 +32,12 @@ const CapTable = () => {
     const { data: totalAssetsData, isLoading } = useContractRead(contract, "totalAssets", [])
     console.log("total assets: ", totalAssetsData)
 
+    const { data: balanceOf } = useContractRead(contract, "balanceOf", [address])
+    console.log("balance of: ", balanceOf)
+    // parse from BigNumber _hex
+    const balance = parseInt(balanceOf?._hex) / 1000000000000000000
+
+
     useEffect(() => {
         if (totalAssetsData) {
             try {
@@ -51,7 +57,6 @@ const CapTable = () => {
     const { data: authorizedInvestors } = useContractRead(contract, "getAuthorizedInvestors", [])
     console.log("authorized investors: ", authorizedInvestors)
 
-    const { data: accreditedInvestor } = useContractRead(contract, "accreditedInvestor", [])
 
 
     return (
@@ -87,7 +92,7 @@ const CapTable = () => {
                         <div className='space-y-2'>
                             <p className='text-lg text-[#A1A1AA]'>{name}</p>
                             <div className="flex items-center space-x-2">
-                                <p className='text-white font-medium text-2xl md:text-3xl'>{formattedTotalAssets ? `$${formattedTotalAssets} GHO` : '0.00 GHO'}</p>
+                                <p className='text-white font-medium text-2xl md:text-3xl'>{formattedTotalAssets ? `$${Number(formattedTotalAssets).toFixed(2)} GHO` : '0.00 GHO'}</p>
                                 <Image src={gho} width={25} height={25} alt="gho" className='rounded-full' />
                             </div>
                             <p className='text-lg text-[#A1A1AA]'>Total funding received</p>
@@ -113,7 +118,7 @@ const CapTable = () => {
                     <div className='space-y-4'>
                         <div className=''>
                         </div>
-                        <NotesTable investors={authorizedInvestors} />
+                        <NotesTable investors={authorizedInvestors} balanceOf={balance} />
                         <div className='border border-[#27272A] rounded-3xl w-full p-6 space-y-4 md:pr-24'>
                             <div className='space-y-2'>
                                 <h3 className='text-white font-medium text-lg md:text-xl'>Rounds breakdown</h3>

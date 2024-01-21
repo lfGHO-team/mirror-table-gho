@@ -38,7 +38,7 @@ const IssueEquity = () => {
     const [generatedLink, setGeneratedLink] = useState('');
     const [open, setOpen] = useState(false);
 
-    const { contract } = useContract("0x561a39ec91c6baac2f7b704ce2655eaca9793a0c");
+    const { contract } = useContract(vault as string);
     const { mutateAsync: addInvestor, isLoading } = useContractWrite(contract, "addInvestor")
     const { data: name } = useContractRead(contract, "name", [])
 
@@ -53,14 +53,14 @@ const IssueEquity = () => {
 
     const generateLink = () => {
         const queryParams = new URLSearchParams({
-            companyName: encodeURIComponent(companyName),
-            companyAddress: encodeURIComponent(companyAddress),
+            companyName: encodeURIComponent(name),
+            companyAddress: encodeURIComponent(vault as string),
             agreementType: encodeURIComponent(agreementType),
             investmentAmount: encodeURIComponent(investmentAmount),
             investorsAddress: encodeURIComponent(investorsAddress),
         }).toString();
 
-        const link = `https://ghothique.vercel.app/invest?${queryParams}`;
+        const link = `https://localhost:3000/invest/${vault}?${queryParams}`;
         setGeneratedLink(link);
     };
 
