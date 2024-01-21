@@ -7,6 +7,7 @@ import { toast } from 'sonner'
 import { useRouter } from 'next/router'
 import { useParams } from 'next/navigation'
 import { ethers } from 'ethers'
+import Head from 'next/head'
 
 const Invest = () => {
 

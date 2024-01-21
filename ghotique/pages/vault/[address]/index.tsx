@@ -112,12 +112,14 @@ const CapTable = () => {
                             {
                                 isOwner ?
                                     <div className="flex flex-col md:absolute top-2 right-8">
-                                        <motion.button
-                                            className="text-white border border-white rounded-2xl px-6 py-2 hover:bg-[#101827] text-sm md:text-base font-light mt-2"
-                                            disabled={isLoading}
-                                        >
-                                            Withdraw
-                                        </motion.button>
+                                        <Link href={`/withdraw-funds/${vault}`} className='w-full text-center'>
+                                            <motion.button
+                                                className="text-white border border-white rounded-2xl px-6 py-2 hover:bg-[#101827] text-sm md:text-base font-light mt-2"
+                                                disabled={isLoading}
+                                            >
+                                                Withdraw
+                                            </motion.button>
+                                        </Link>
                                         {
                                             balance > .1 ?
                                                 <div className="flex items-center">

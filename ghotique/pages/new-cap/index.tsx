@@ -197,10 +197,6 @@ const CreateCapTable = () => {
                             )}
                         </motion.button>
                 }
-                <p>
-                    allowance:
-                    {ghoAllowance}
-                </p>
             </motion.div>
         </>
     );
