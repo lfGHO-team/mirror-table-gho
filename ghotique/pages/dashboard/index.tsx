@@ -27,7 +27,7 @@ const Dashboard = () => {
                 <meta property="og:description" content="" />
             </Head>
             <main
-                className={`flex min-h-[92dvh] flex-col space-y-6 w-full bg-[#0b111b] md:py-12 p-6 md:px-24 ${inter.className}`}
+                className={`flex min-h-[92dvh] flex-col space-y-6 w-full bg-[#0b111b] md:py-12 p-6 md:px-24 overflow-scroll ${inter.className}`}
             >
                 {
                     isLoading ?
@@ -41,12 +41,12 @@ const Dashboard = () => {
                                 </div>
                             ))}
                         </div> :
-                        <div className="flex gap-4 flex-col md:flex-row overflow-scroll">
+                        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 overflow-scroll">
                             {data && data.map((item: any, index: number) => (
-                                <div key={index}>
-                                    <Link href={`/vault/${item}`} className='hover:bg-[#101827] hover:cursor-pointer flex'
+                                <div key={index} className='overflow-scroll'>
+                                    <Link href={`/vault/${item}`} className='hover:bg-[#101827] hover:cursor-pointer flex overflow-hidden'
                                     >
-                                        <div className='border border-[#27272A] rounded-xl flex items-center text-white space-x-2 p-4 hover:bg-[#101827] hover:cursor-pointer'
+                                        <div className='border border-[#27272A] rounded-xl flex items-center text-white space-x-2 p-4 hover:bg-[#101827] hover:cursor-pointer w-full overflow-scroll'
                                         >
                                             <div>
                                                 <TbTable size={20} />
