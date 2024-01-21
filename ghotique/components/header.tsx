@@ -10,7 +10,7 @@ import Link from 'next/link';
 
 const navigation = [
     { name: 'Dashboard', href: '/dashboard', current: false },
-    { name: 'Funds vault', href: '/', current: false },
+    { name: 'Funds vault', href: '/vaults', current: false },
     { name: 'Notes', href: '#', current: false },
 ]
 
