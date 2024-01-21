@@ -141,10 +141,20 @@ const ExitPosition = () => {
                             <span>{receiveAmount.toFixed(0)} GHO</span> {/* Format the amount to two decimal places */}
                         </div>
                         <button
-                            className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                            className="text-white border border-white rounded-2xl px-6 py-2 hover:bg-[#101827] font-light mx-auto mt-2 text-sm"
                             onClick={call}
+                            disabled={redeemIsLoading}
                         >
-                            Redeem funds →
+                            {redeemIsLoading ? (
+                                <div className='flex items-center space-x-2'>
+                                    <span>
+                                        Reedeming
+                                    </span>
+                                    <div className="spinner"></div>
+                                </div>
+                            ) : (
+                                "Redeem funds"
+                            )}
                         </button>
                     </div>
                 </div>
