@@ -65,7 +65,7 @@ const IssueEquity = () => {
             investorsAddress: encodeURIComponent(investorsAddress),
         }).toString();
 
-        const link = `https://localhost:3000/invest/${vault}?${queryParams}`;
+        const link = `https://ghothique.xyz/invest/${vault}?${queryParams}`;
         setGeneratedLink(link);
     };
 
