@@ -6,6 +6,7 @@ import { ConnectKitButton } from 'connectkit';
 import ghothique from "../assets/logos/ghothique.svg"
 import Image from 'next/image';
 import Link from 'next/link';
+import { motion } from 'framer-motion';
 
 
 const navigation = [
@@ -25,7 +26,7 @@ export default function Navbar() {
         <Disclosure as="nav" className="bg-[#0b111b] sticky top-0">
             {({ open }) => (
                 <>
-                    <div className="mx-auto max-w-7xl p-1 sm:px-6 lg:px-8">
+                    <div className="mx-auto max-w-7xl px-2 py-1 sm:px-6 lg:px-8">
                         <div className="relative flex h-16 items-center justify-between">
                             <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
                                 {/* Mobile menu button*/}
@@ -46,7 +47,7 @@ export default function Navbar() {
                                         src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
                                         alt="Your Company"
                                     /> */}
-                                    <Link href='/'>
+                                    <Link href='/' className='hidden md:flex'>
                                         <Image src={ghothique} width={125} height={125} alt='ghothique logo' />
                                     </Link>
                                 </div>
@@ -82,8 +83,18 @@ export default function Navbar() {
                         </div>
                     </div>
 
-                    <Disclosure.Panel className="sm:hidden">
-                        <div className="space-y-1 px-2 pb-3 pt-2">
+                    <Disclosure.Panel className="sm:hidden absolute top-14 bg-[#0b111b] w-full">
+                        <motion.div
+                            initial={{ opacity: 0, y: -100 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: .1 }}
+                            exit={{ opacity: 0, y: -100 }}
+                            className="space-y-1 px-2 pb-3 pt-2">
+                            <div className='p-2'>
+                                <Link href='/' className='md:hidden'>
+                                    <Image src={ghothique} width={100} height={100} alt='ghothique logo' />
+                                </Link>
+                            </div>
                             {navigation.map((item) => (
                                 <Disclosure.Button
                                     key={item.name}
@@ -98,7 +109,7 @@ export default function Navbar() {
                                     {item.name}
                                 </Disclosure.Button>
                             ))}
-                        </div>
+                        </motion.div>
                     </Disclosure.Panel>
                 </>
             )}
