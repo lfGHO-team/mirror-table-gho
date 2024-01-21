@@ -4,9 +4,10 @@ import Link from 'next/link'
 
 type EquityLinkProps = {
     onClose: () => void;
+    vault: string;
 };
 
-const EquityLink = ({ onClose }: EquityLinkProps) => {
+const EquityLink = ({ onClose, vault }: EquityLinkProps) => {
 
     const onBackgroundClick = (event: { currentTarget: any; target: any; }) => {
         if (event.currentTarget === event.target) {
@@ -51,7 +52,9 @@ const EquityLink = ({ onClose }: EquityLinkProps) => {
                             Once investors deposit the funds data will be reflected on the dashboard.
                         </p>
                     </div>
-                    <Link href={"/"} className="px-4 py-2 text-center text-white font-light hover:font-medium transition-all duration-300 text-xl rounded-md w-full shadow-sm focus:outline-none focus:ring-2 ">
+                    <Link href={"/issue-equity"}
+                        as={"/issue-equity/" + vault}
+                        className="px-4 py-2 text-center text-white font-light hover:font-medium transition-all duration-300 text-xl rounded-md w-full shadow-sm focus:outline-none focus:ring-2 ">
                         Proceed →
                     </Link>
                 </div>

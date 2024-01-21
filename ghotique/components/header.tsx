@@ -10,9 +10,7 @@ import Link from 'next/link';
 
 const navigation = [
     { name: 'Dashboard', href: '/dashboard', current: false },
-    { name: 'Funds vault', href: '#', current: false },
-    { name: 'New cap table', href: '/cap-table', current: false },
-    { name: 'My Cap tables', href: '/my-cap-tables', current: false },
+    { name: 'Funds vault', href: '/', current: false },
     { name: 'Notes', href: '#', current: false },
 ]
 

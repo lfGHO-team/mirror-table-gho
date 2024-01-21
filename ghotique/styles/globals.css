@@ -1,3 +1,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.active-circle {
+    background-color: #10b981;
+    /* Tailwind CSS Emerald 500 for active state */
+}
+
+.inactive-circle {
+    background-color: #d1d5db;
+    /* Tailwind CSS Cool Gray 300 for inactive state */
+}

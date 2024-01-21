@@ -13,17 +13,22 @@ import { useEffect, useState } from 'react'
 import { useContract, useContractRead, useWallet } from "@thirdweb-dev/react";
 import { useAccount } from 'wagmi'
 import { ethers } from 'ethers'
+import { useRouter } from 'next/router'
+import Link from 'next/link'
 
 const inter = Inter({ subsets: ['latin'] })
 
-const CapTable = () => {
+const Vault = () => {
 
+    const router = useRouter();
+    const { address: vault } = router.query;
     const [equityModal, setEquityModal] = useState(false)
     const onClose = () => setEquityModal(false)
     const { address } = useAccount();
     const { contract } = useContract("0x561a39ec91c6baac2f7b704ce2655eaca9793a0c");
     const [formattedTotalAssets, setFormattedTotalAssets] = useState('');
 
+    console.log("vault: ", vault)
 
     const { data: totalAssetsData, isLoading } = useContractRead(contract, "totalAssets", [])
     console.log("total assets: ", totalAssetsData)
@@ -62,18 +67,9 @@ const CapTable = () => {
             <main
                 className={`flex min-h-[92dvh] flex-col space-y-6 md:space-y-12 w-full bg-[#0b111b] md:py-12 p-6 md:px-24 ${inter.className}`}
             >
-
-                <div className='border border-[#27272A] rounded-xl flex items-center text-white space-x-4 p-4 md:w-2/5 hover:bg-[#101827] hover:cursor-pointer'
-                    onClick={() => setEquityModal(true)}
-                >
-                    <div>
-                        <Image src={link} width={75} height={75} alt='equity link' />
-                    </div>
-                    <div className='space-y-1'>
-                        <h3 className='font-medium text-lg'>Issue equity link</h3>
-                        <p className='font-light leading-tight text-xs md:text-sm'>Create a link for the investors to deposit funds and receive equity on-chain assets.</p>
-                    </div>
-                </div>
+                <h2 className='text-3xl text-white'>
+                    Investor Portal
+                </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
                     <div className='relative border border-[#27272A] rounded-2xl w-full p-6 space-y-8 md:pr-24'>
                         <div className='space-y-2'>
@@ -86,14 +82,14 @@ const CapTable = () => {
                             <p className='text-lg text-[#A1A1AA]'>Total funding received</p>
                             {
                                 isOwner &&
-                                <div className="flex items-center space-x-2 absolute top-2 right-8">
-                                    <motion.button
+                                <motion.div className="flex items-center space-x-2 absolute top-2 right-8">
+                                    <Link
+                                        href={`/exit-investment/${vault}`}
                                         className="text-white border border-white rounded-2xl px-6 py-2 hover:bg-[#101827] text-sm md:text-base font-light mx-auto mt-2"
-                                        disabled={isLoading}
                                     >
-                                        Withdraw
-                                    </motion.button>
-                                </div>
+                                        Exit investment
+                                    </Link>
+                                </motion.div>
                             }
 
                         </div>
@@ -105,12 +101,6 @@ const CapTable = () => {
                         <div className=''>
                         </div>
                         <NotesTable investors={authorizedInvestors} />
-                        <div className='border border-[#27272A] rounded-3xl w-full p-6 space-y-4 md:pr-24'>
-                            <div className='space-y-2'>
-                                <h3 className='text-white font-medium text-lg md:text-xl'>Rounds breakdown</h3>
-                                <Image src={wallet} width={30} height={30} alt='pie chart' />
-                            </div>
-                        </div>
                     </div>
                 </div>
             </main>
@@ -118,7 +108,7 @@ const CapTable = () => {
             <AnimatePresence>
                 {
                     equityModal &&
-                    <EquityLink onClose={onClose} />
+                    <EquityLink onClose={onClose} vault={vault as string} />
                 }
             </AnimatePresence>
 
@@ -126,4 +116,4 @@ const CapTable = () => {
     )
 }
 
-export default CapTable
+export default Vault

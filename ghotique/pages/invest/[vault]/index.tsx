@@ -12,7 +12,7 @@ const Invest = () => {
 
     const router = useRouter();
     const vault = router.query.vault;
-    const { companyName, agreementType, investmentAmount, investorsAddress } = router.query;
+    const { companyName, companyAddress, agreementType, investmentAmount, investorsAddress } = router.query;
 
     const { isConnected, address } = useAccount()
     const { contract } = useContract("0x561a39ec91c6baac2f7b704ce2655eaca9793a0c");
@@ -89,6 +89,10 @@ const Invest = () => {
                             <span>Sending
                                 funds to</span>
                             <span>{companyName}</span>
+                        </div>
+                        <div className="flex flex-col md:flex-row justify-between">
+                            <span>Company address</span>
+                            <span>{companyAddress}</span>
                         </div>
                         <div className="flex flex-col md:flex-row justify-between">
                             <span>Amount</span>

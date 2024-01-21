@@ -3,7 +3,8 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { toast } from 'sonner';
 import { FaArrowRight, FaLongArrowAltRight } from 'react-icons/fa';
 import { FaRegCopy } from "react-icons/fa";
-import { useContract, useContractWrite } from '@thirdweb-dev/react';
+import { useContract, useContractRead, useContractWrite } from '@thirdweb-dev/react';
+import { useRouter } from 'next/router';
 
 const containerVariants = {
     initial: {
@@ -23,7 +24,12 @@ const childVariants = {
 };
 
 const IssueEquity = () => {
+
+    const router = useRouter();
+    const { vault } = router.query;
+
     const [companyName, setCompanyName] = useState('');
+    const [companyAddress, setCompanyAddress] = useState('');
     const [agreementType, setAgreementType] = useState('');
     const [investmentAmount, setInvestmentAmount] = useState('');
     const [investorsAddress, setInvestorsAddress] = useState('');
@@ -34,6 +40,7 @@ const IssueEquity = () => {
 
     const { contract } = useContract("0x561a39ec91c6baac2f7b704ce2655eaca9793a0c");
     const { mutateAsync: addInvestor, isLoading } = useContractWrite(contract, "addInvestor")
+    const { data: name } = useContractRead(contract, "name", [])
 
     const call = async () => {
         try {
@@ -47,6 +54,7 @@ const IssueEquity = () => {
     const generateLink = () => {
         const queryParams = new URLSearchParams({
             companyName: encodeURIComponent(companyName),
+            companyAddress: encodeURIComponent(companyAddress),
             agreementType: encodeURIComponent(agreementType),
             investmentAmount: encodeURIComponent(investmentAmount),
             investorsAddress: encodeURIComponent(investorsAddress),
@@ -93,8 +101,15 @@ const IssueEquity = () => {
                 <motion.div variants={childVariants} className="mb-4 space-y-2">
                     <label htmlFor="companyName" className="text-sm">Company name</label>
                     <motion.input variants={childVariants} id="companyName" type="text" className="w-full p-2 bg-[#0b111b] border border-[#D1D5DB] rounded-lg"
-                        value={companyName}
+                        value={name}
                         onChange={(e) => setCompanyName(e.target.value)}
+                    />
+                </motion.div>
+                <motion.div variants={childVariants} className="mb-4 space-y-2">
+                    <label htmlFor="companyAddress" className="text-sm">Company address</label>
+                    <motion.input variants={childVariants} id="companyAddress" type="text" className="w-full bg-[#0b111b] border border-[#D1D5DB] rounded-lg text-xs p-3"
+                        value={vault}
+                        onChange={(e) => setCompanyAddress(e.target.value)}
                     />
                 </motion.div>
                 <motion.div variants={childVariants} className="mb-4 space-y-2">

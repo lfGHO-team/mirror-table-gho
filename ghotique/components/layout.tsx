@@ -10,7 +10,7 @@ const Layout = (props: any) => (
         </Head> */}
         <div>
             <Navbar />
-            <main className='min-h-[92dvh] bg-[#0b111b]'>
+            <main className='min-h-[92dvh] bg-[#0b111b] pb-4 md:pb-16'>
                 {props.children}
             </main>
         </div>
