@@ -154,7 +154,7 @@ const CreateCapTable = () => {
                         onChange={(e) => setNumConfirmationsRequired(e.target.value)} />
                 </motion.div>
                 <motion.div variants={childVariants} className="mb-4 space-y-2">
-                    <label htmlFor="minInitialInvestment" className="text-sm">Initial investment (in USD)</label>
+                    <label htmlFor="minInitialInvestment" className="text-sm">Initial investment (in GHO)</label>
                     <motion.input variants={childVariants} min={50} id="minInitialInvestment" type="number" className="w-full p-2 bg-[#0b111b] border border-[#D1D5DB] rounded-lg"
                         value={minInitialInvestment}
                         onChange={(e) => setMinInitialInvestment(e.target.value)} />
@@ -165,8 +165,20 @@ const CreateCapTable = () => {
                         <Web3Button
                             contractAddress="0xc4bF5CbDaBE595361438F8c6a187bDc330539c60"
                             action={(contract) => {
-                                contract.call("approve", ["0x01759CC46Fbc6753D27689E411A67278f01805f7", `${minInitialInvestment}000000000000000000`])
+                                contract.call("approve", ["0x01759CC46Fbc6753D27689E411A67278f01805f7", `${minInitialInvestment}000000000000000000`]).then(() => {
+                                    toast.success("GHO approved!");
+                                }
+                                )
                             }}
+                            onError={() => {
+                                toast.error("Error approving GHO");
+                            }
+                            }
+                            onSubmit={
+                                () => {
+                                    toast.loading('Approving GHO', { duration: 5000 })
+                                }
+                            }
                         >
                             {approveIsLoading ? (
                                 <div className='flex items-center space-x-2'>
@@ -183,13 +195,25 @@ const CreateCapTable = () => {
                         <Web3Button
                             contractAddress="0x01759CC46Fbc6753D27689E411A67278f01805f7"
                             isDisabled={!isFormValid() || isLoading}
+                            onSubmit={
+                                () => {
+                                    toast.loading('Creating cap table', { duration: 5000 })
+                                }
+                            }
                             onError={() => {
                                 toast.error("Error creating cap table");
                             }
                             }
                             action={(contract) => {
-                                contract.call("createNewMirrorTable", [companyName, ticker, signers, numConfirmationsRequired, `${minInitialInvestment}000000000000000000`])
+                                contract.call("createNewMirrorTable", [companyName, ticker, signers, numConfirmationsRequired, `${minInitialInvestment}000000000000000000`]).then(() => {
+                                    toast.success("Cap table created!");
+                                    setTimeout(() => {
+                                        router.push("/cap-tables");
+                                    }, 1000)
+                                }
+                                )
                             }}
+
                         >
                             {isLoading ? (
                                 <div className='flex items-center space-x-2'>
