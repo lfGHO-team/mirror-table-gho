@@ -6,6 +6,7 @@ import { Sepolia } from "@thirdweb-dev/chains";
 import { useContract, useContractWrite, useContractRead, Web3Button } from "@thirdweb-dev/react";
 import { ethers } from 'ethers';
 import { useAccount } from 'wagmi';
+import { useRouter } from 'next/router';
 
 const containerVariants = {
     initial: {
@@ -26,12 +27,13 @@ const childVariants = {
 
 const CreateCapTable = () => {
 
+    const router = useRouter();
     const { address } = useAccount();
     const [companyName, setCompanyName] = useState('');
     const [ticker, setTicker] = useState('');
     const [signers, setSigners] = useState(['']);
     const [numConfirmationsRequired, setNumConfirmationsRequired] = useState('');
-    const [minInitialInvestment, setMinInitialInvestment] = useState('');
+    const [minInitialInvestment, setMinInitialInvestment] = useState('50');
 
     const { contract } = useContract("0x01759CC46Fbc6753D27689E411A67278f01805f7");
     const { mutateAsync: createNewMirrorTable, isLoading } = useContractWrite(contract, "createNewMirrorTable")
@@ -153,7 +155,7 @@ const CreateCapTable = () => {
                 </motion.div>
                 <motion.div variants={childVariants} className="mb-4 space-y-2">
                     <label htmlFor="minInitialInvestment" className="text-sm">Initial investment (in USD)</label>
-                    <motion.input variants={childVariants} id="minInitialInvestment" type="text" className="w-full p-2 bg-[#0b111b] border border-[#D1D5DB] rounded-lg"
+                    <motion.input variants={childVariants} min={50} id="minInitialInvestment" type="number" className="w-full p-2 bg-[#0b111b] border border-[#D1D5DB] rounded-lg"
                         value={minInitialInvestment}
                         onChange={(e) => setMinInitialInvestment(e.target.value)} />
                 </motion.div>
@@ -177,10 +179,22 @@ const CreateCapTable = () => {
                                 "Approve GHO"
                             )}
                         </Web3Button>
-
                         :
                         <Web3Button
                             contractAddress="0x01759CC46Fbc6753D27689E411A67278f01805f7"
+                            isDisabled={!isFormValid() || isLoading}
+                            onError={() => {
+                                toast.error("Error creating cap table");
+                            }
+                            }
+                            onSuccess={() => {
+                                toast.success("Cap table created!");
+                                // wait 2 seconds
+                                setTimeout(() => {
+                                    router.push("/dashboard")
+                                }, 1000)
+                            }
+                            }
                             action={(contract) => {
                                 contract.call("createNewMirrorTable", [companyName, ticker, signers, numConfirmationsRequired, minInitialInvestment])
                             }}
