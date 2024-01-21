@@ -187,6 +187,17 @@ const IssueEquity = () => {
                             action={(contract) => {
                                 contract.call("addInvestor", [investorsAddress])
                             }}
+                            onError={
+                                (e) => {
+                                    console.log(e)
+                                    toast.error('Something went wrong!')
+                                }
+                            }
+                            onSubmit={
+                                () => {
+                                    toast.loading('Adding', { duration: 5000 })
+                                }
+                            }
                         >
                             {isLoading ? (
                                 <div className='flex items-center space-x-2'>
