@@ -196,7 +196,7 @@ const CreateCapTable = () => {
                             }
                             }
                             action={(contract) => {
-                                contract.call("createNewMirrorTable", [companyName, ticker, signers, numConfirmationsRequired, minInitialInvestment])
+                                contract.call("createNewMirrorTable", [companyName, ticker, signers, numConfirmationsRequired, `${minInitialInvestment}000000000000000000`])
                             }}
                         >
                             {isLoading ? (
