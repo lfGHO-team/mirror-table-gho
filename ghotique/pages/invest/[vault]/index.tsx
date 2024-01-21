@@ -131,6 +131,7 @@ const Invest = () => {
                             <button
                                 className=" text-white font-bold py-2 px-4 rounded"
                                 onClick={call}
+                                disabled={depositLoading}
                             >
                                 {isLoading ? (
                                     <div className='flex items-center space-x-2'>

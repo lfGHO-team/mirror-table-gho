@@ -29,7 +29,6 @@ function MyApp({ Component, pageProps }: AppProps) {
       >
         <ConnectKitProvider theme="midnight"
           customTheme={{
-            "--ck-font-family": '"Comic Sans MS", "Comic Sans", cursive',
             "--ck-connectbutton-font-size": "14px",
             "--ck-connectbutton-background": "#0b111b",
             "--ck-connectbutton-hover-background": "#101827",
