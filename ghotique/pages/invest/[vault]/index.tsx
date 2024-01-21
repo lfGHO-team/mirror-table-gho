@@ -57,17 +57,17 @@ const Invest = () => {
         }
     }
 
-    // if (isAccreditedInvestor) {
-    //     return (
-    //         <main
-    //             className={`flex min-h-[70dvh] flex-col justify-center w-full bg-[#0b111b] p-6`}
-    //         >
-    //             <h2>
-    //                 You are not an accredited investor. Please contact the company to request access.
-    //             </h2>
-    //         </main>
-    //     )
-    // }
+    if (!isAccreditedInvestor) {
+        return (
+            <main
+                className={`flex min-h-[70dvh] flex-col w-full bg-[#0b111b] p-6 md:px-12`}
+            >
+                <h2 className='text-white'>
+                    You are not an accredited investor. Please contact the company to request access.
+                </h2>
+            </main>
+        )
+    }
 
     return (
         <>
