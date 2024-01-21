@@ -81,6 +81,16 @@ const CreateCapTable = () => {
         setSigners(newSigners);
     };
 
+    const isFormValid = () => {
+        return (
+            companyName.trim() !== '' &&
+            ticker.trim() !== '' &&
+            signers.every(signer => signer.trim() !== '') &&
+            numConfirmationsRequired.trim() !== '' &&
+            minInitialInvestment.trim() !== ''
+        );
+    };
+
     return (
         <>
             <motion.div
@@ -148,30 +158,42 @@ const CreateCapTable = () => {
                         onChange={(e) => setMinInitialInvestment(e.target.value)} />
                 </motion.div>
 
-                <motion.button
-                    variants={childVariants}
-                    className="text-white border border-white rounded-2xl px-6 py-2 hover:bg-[#101827] text-sm md:text-base font-light mx-auto mt-2"
-                    onClick={call}
-                    disabled={isLoading}
-                >
-                    Create cap table
-                </motion.button>
                 {
                     ghoAllowance < minInitialInvestment ?
                         <button
                             className="text-white font-bold py-2 px-4 rounded-lg border"
                             onClick={callApprove}
+                            disabled={!isFormValid() || approveIsLoading}
                         >
-                            Approve GHO
+                            {approveIsLoading ? (
+                                <div className='flex items-center space-x-2'>
+                                    <span>
+                                        Appoving
+                                    </span>
+                                    <div className="spinner"></div>
+                                </div>
+                            ) : (
+                                "Approve GHO"
+                            )}
                         </button>
                         :
                         <motion.button
                             variants={childVariants}
                             className="text-white border border-white rounded-2xl px-6 py-2 hover:bg-[#101827] text-sm md:text-base font-light mx-auto mt-2"
                             onClick={call}
-                            disabled={isLoading}
+                            disabled={!isFormValid() || isLoading}
+
                         >
-                            Send funds →
+                            {isLoading ? (
+                                <div className='flex items-center space-x-2'>
+                                    <span>
+                                        Creating
+                                    </span>
+                                    <div className="spinner"></div>
+                                </div>
+                            ) : (
+                                "Create cap table"
+                            )}
                         </motion.button>
                 }
                 <p>
