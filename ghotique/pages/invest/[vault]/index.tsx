@@ -52,6 +52,10 @@ const Invest = () => {
             const data = await deposit({ args: [`${investmentAmount}000000000000000000`, address] });
             console.info("contract call successs", data);
             toast.success("Funds deposited!");
+            // wait 2 sec redirect
+            setTimeout(() => {
+                router.push(`/vault/${vault}`)
+            }, 2000)
         } catch (err) {
             console.error("contract call failure", err);
             toast.error("Deposit failed");
