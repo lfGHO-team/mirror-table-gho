@@ -1,15 +1,17 @@
 import React from 'react'
 import { useAccount } from 'wagmi'
-import gho from "../../assets/tokens/gho.png"
+import gho from "../../../assets/tokens/gho.png"
 import Image from 'next/image'
 import { Web3Button, useContract, useContractRead, useContractWrite } from '@thirdweb-dev/react'
 import { toast } from 'sonner'
 import { useRouter } from 'next/router'
 import { useParams } from 'next/navigation'
+import { ethers } from 'ethers'
 
 const Invest = () => {
 
     const router = useRouter();
+    const vault = router.query.vault;
     const { companyName, agreementType, investmentAmount, investorsAddress } = router.query;
 
     const { isConnected, address } = useAccount()
@@ -19,13 +21,35 @@ const Invest = () => {
     console.log("is accredited investor: ", isAccreditedInvestor)
 
     const { contract: ghoContract } = useContract("0xc4bf5cbdabe595361438f8c6a187bdc330539c60");
-    const { mutateAsync: approve, isLoading: approveIsLoading } = useContractWrite(contract, "approve")
+    const { mutateAsync: approve, isLoading: approveIsLoading } = useContractWrite(ghoContract, "approve")
 
+    const { data: allowance, isLoading: allowanceIsLoading } = useContractRead(ghoContract, "allowance", [address, vault])
+    console.log("allowance: ", allowance)
+
+    const ghoAllowance = allowance ? ethers.utils.formatUnits(allowance, 18) : 0;
+    console.log("allowance: ", ghoAllowance)
+
+
+
+    const callApprove = async () => {
+        try {
+            toast.loading("Approving funds...")
+            const data = await approve({ args: [vault, `${investmentAmount}000000000000000000`] });
+            console.info("contract call successs", data);
+        } catch (err) {
+            console.error("contract call failure", err);
+            toast.error("Contract call failed");
+        } finally {
+
+            toast.success("Funds approved!");
+
+        }
+    }
 
     const call = async () => {
         try {
             toast.loading("Sending funds...")
-            const data = await deposit({ args: [50, address] });
+            const data = await deposit({ args: [`${investmentAmount}000000000000000000`, address] });
             console.info("contract call successs", data);
         } catch (err) {
             console.error("contract call failure", err);
@@ -33,20 +57,19 @@ const Invest = () => {
         } finally {
             toast.success("Funds deposited!");
         }
-
     }
 
-    if (isAccreditedInvestor) {
-        return (
-            <main
-                className={`flex min-h-[70dvh] flex-col justify-center w-full bg-[#0b111b] p-6`}
-            >
-                <h2>
-                    You are not an accredited investor. Please contact the company to request access.
-                </h2>
-            </main>
-        )
-    }
+    // if (isAccreditedInvestor) {
+    //     return (
+    //         <main
+    //             className={`flex min-h-[70dvh] flex-col justify-center w-full bg-[#0b111b] p-6`}
+    //         >
+    //             <h2>
+    //                 You are not an accredited investor. Please contact the company to request access.
+    //             </h2>
+    //         </main>
+    //     )
+    // }
 
     return (
         <>
@@ -83,14 +106,32 @@ const Invest = () => {
                             <span>{investorsAddress}</span>
                         </div>
                     </div>
-                    <button
-                        className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                        onClick={call}
-                    >
-                        Send funds →
-                    </button>
+                    <div>
+                        <p>
+                            allowance:
+                            {ghoAllowance}
+                        </p>
+                    </div>
 
+                    {
+                        investmentAmount &&
+                            ghoAllowance < investmentAmount ?
+                            <button
+                                className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                                onClick={callApprove}
+                            >
+                                Approve
+                            </button>
+                            :
+                            <button
+                                className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                                onClick={call}
+                            >
+                                Send funds →
+                            </button>
+                    }
                 </div>
+
             </main>
         </>
     )
