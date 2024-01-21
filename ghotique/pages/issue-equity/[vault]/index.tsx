@@ -171,16 +171,16 @@ const IssueEquity = () => {
                         //     onClick={call
                         //     }
                         // >
-                        //     {isLoading ? (
-                        //         <div className='flex items-center space-x-2'>
-                        //             <span>
-                        //                 Adding investor
-                        //             </span>
-                        //             <div className="spinner"></div>
-                        //         </div>
-                        //     ) : (
-                        //         "Add investor"
-                        //     )}
+                        // {isLoading ? (
+                        //     <div className='flex items-center space-x-2'>
+                        //         <span>
+                        //             Adding investor
+                        //         </span>
+                        //         <div className="spinner"></div>
+                        //     </div>
+                        // ) : (
+                        //     "Add investor"
+                        // )}
                         // </motion.button>
                         <Web3Button
                             contractAddress={vault as string}
@@ -188,7 +188,16 @@ const IssueEquity = () => {
                                 contract.call("addInvestor", [investorsAddress])
                             }}
                         >
-                            Add Investor
+                            {isLoading ? (
+                                <div className='flex items-center space-x-2'>
+                                    <span>
+                                        Adding investor
+                                    </span>
+                                    <div className="spinner"></div>
+                                </div>
+                            ) : (
+                                "Add investor"
+                            )}
                         </Web3Button>
 
                 }

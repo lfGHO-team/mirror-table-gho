@@ -3,7 +3,7 @@ import { motion } from 'framer-motion'
 import { toast } from 'sonner';
 import { ThirdwebSDK } from "@thirdweb-dev/sdk";
 import { Sepolia } from "@thirdweb-dev/chains";
-import { useContract, useContractWrite, useContractRead } from "@thirdweb-dev/react";
+import { useContract, useContractWrite, useContractRead, Web3Button } from "@thirdweb-dev/react";
 import { ethers } from 'ethers';
 import { useAccount } from 'wagmi';
 
@@ -160,11 +160,11 @@ const CreateCapTable = () => {
 
                 {
                     ghoAllowance < minInitialInvestment ?
-                        <motion.button
-                            variants={childVariants}
-                            className="text-white font-bold py-2 px-4 rounded-lg border"
-                            onClick={callApprove}
-                            disabled={!isFormValid() || approveIsLoading}
+                        <Web3Button
+                            contractAddress="0xc4bF5CbDaBE595361438F8c6a187bDc330539c60"
+                            action={(contract) => {
+                                contract.call("approve", ["0x01759CC46Fbc6753D27689E411A67278f01805f7", `${minInitialInvestment}000000000000000000`])
+                            }}
                         >
                             {approveIsLoading ? (
                                 <div className='flex items-center space-x-2'>
@@ -176,14 +176,14 @@ const CreateCapTable = () => {
                             ) : (
                                 "Approve GHO"
                             )}
-                        </motion.button>
-                        :
-                        <motion.button
-                            variants={childVariants}
-                            className="text-white border border-white rounded-2xl px-6 py-2 hover:bg-[#101827] text-sm md:text-base font-light mx-auto mt-2"
-                            onClick={call}
-                            disabled={!isFormValid() || isLoading}
+                        </Web3Button>
 
+                        :
+                        <Web3Button
+                            contractAddress="0x01759CC46Fbc6753D27689E411A67278f01805f7"
+                            action={(contract) => {
+                                contract.call("createNewMirrorTable", [companyName, ticker, signers, numConfirmationsRequired, minInitialInvestment])
+                            }}
                         >
                             {isLoading ? (
                                 <div className='flex items-center space-x-2'>
@@ -195,7 +195,7 @@ const CreateCapTable = () => {
                             ) : (
                                 "Create cap table"
                             )}
-                        </motion.button>
+                        </Web3Button>
                 }
             </motion.div>
         </>
