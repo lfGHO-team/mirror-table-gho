@@ -36,7 +36,7 @@ const CapTable = () => {
                 <div className="flex gap-4">
                     {data && data.map((item: any, index: number) => (
                         <>
-                            <Link href={`/dashboard/${item}`} key={index} className='hover:bg-[#101827] hover:cursor-pointer flex'
+                            <Link href={`/vault/${item}`} key={index} className='hover:bg-[#101827] hover:cursor-pointer flex'
                             >
                                 <div className='border border-[#27272A] rounded-xl flex items-center text-white space-x-2 p-4 hover:bg-[#101827] hover:cursor-pointer'
                                 >

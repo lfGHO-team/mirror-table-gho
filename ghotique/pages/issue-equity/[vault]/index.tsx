@@ -46,10 +46,15 @@ const IssueEquity = () => {
         try {
             const data = await addInvestor({ args: [investorsAddress] });
             console.info("contract call successs", data);
+            toast.success('Investor added!')
         } catch (err) {
             console.error("contract call failure", err);
+            toast.error('Something went wrong!')
         }
     }
+
+    const { data: accreditedInvestor, isLoading: checkInvestorLoading } = useContractRead(contract, "accreditedInvestor", [investorsAddress])
+
 
     const generateLink = () => {
         const queryParams = new URLSearchParams({
@@ -147,17 +152,28 @@ const IssueEquity = () => {
                         onChange={(e) => setAmountOfShares(e.target.value)}
                     />
                 </motion.div> */}
-                <motion.button
-                    variants={childVariants}
-                    className="text-white border border-white rounded-2xl px-6 py-2 hover:bg-[#101827] text-sm md:text-base font-light mx-auto mt-2"
-                    onClick={() => {
-                        generateLink()
-                        setOpen(true)
-                    }
-                    }
-                >
-                    Generate link
-                </motion.button>
+                {
+                    accreditedInvestor ?
+                        <motion.button
+                            variants={childVariants}
+                            className="text-white border border-white rounded-2xl px-6 py-2 hover:bg-[#101827] text-sm md:text-base font-light mx-auto mt-2"
+                            onClick={() => {
+                                generateLink()
+                                setOpen(true)
+                            }
+                            }
+                        >
+                            Generate link
+                        </motion.button> :
+                        <motion.button
+                            variants={childVariants}
+                            className="text-white border border-white rounded-2xl px-6 py-2 hover:bg-[#101827] text-sm md:text-base font-light mx-auto mt-2"
+                            onClick={call
+                            }
+                        >
+                            Add investor
+                        </motion.button>
+                }
             </motion.div>
             <AnimatePresence>
 
@@ -177,9 +193,9 @@ const IssueEquity = () => {
                             <p className='text-sm text-[#A1A1AA] text-center'>Share the link with the investor to receive the payment</p>
                             <div className="flex items-center justify-between mt-4 space-x-2 border rounded-2xl p-2 w-full">
                                 <p className='text-sm text-white overflow-x-scroll'>{generatedLink}</p>
-                                <FaRegCopy color='white' size={28}
+                                <FaRegCopy color='white' size={20}
                                     onClick={() => { navigator.clipboard.writeText(generatedLink); toast.success('Copied to clipboard!') }}
-                                    className='cursor-pointer'
+                                    className='cursor-pointer w-full'
                                 />
                             </div>
                             <div className='w-full flex justify-center mt-4 items-center space-x-2'>

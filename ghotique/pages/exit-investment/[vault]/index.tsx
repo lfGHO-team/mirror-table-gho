@@ -46,6 +46,9 @@ const ExitPosition = () => {
             const data = await redeem({ args: [`${Number(receiveAmount).toFixed(0)}000000000000000000`, address, address] });
             console.info("contract call successs", data);
             toast.success('Funds redeemed!', { duration: 2000 })
+            setTimeout(() => {
+                router.push(`/vault/${vault}`)
+            }, 2000)
         } catch (err) {
             console.error("contract call failure", err);
         }

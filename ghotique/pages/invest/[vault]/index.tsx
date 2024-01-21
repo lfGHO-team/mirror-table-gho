@@ -15,7 +15,7 @@ const Invest = () => {
     const { companyName, companyAddress, agreementType, investmentAmount, investorsAddress } = router.query;
 
     const { isConnected, address } = useAccount()
-    const { contract } = useContract("0x561a39ec91c6baac2f7b704ce2655eaca9793a0c");
+    const { contract } = useContract(vault as string);
     const { data: isAccreditedInvestor, isLoading } = useContractRead(contract, "accreditedInvestor", [address])
     const { mutateAsync: deposit, isLoading: depositLoading } = useContractWrite(contract, "deposit")
     console.log("is accredited investor: ", isAccreditedInvestor)
@@ -48,7 +48,7 @@ const Invest = () => {
     const call = async () => {
         try {
             toast.loading("Sending funds...")
-            const data = await deposit({ args: [`${investmentAmount}`, address] });
+            const data = await deposit({ args: [`${investmentAmount}000000000000000000`, address] });
             console.info("contract call successs", data);
             toast.success("Funds deposited!");
         } catch (err) {

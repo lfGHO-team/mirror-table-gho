@@ -14,6 +14,7 @@ import { useContract, useContractRead, useWallet } from "@thirdweb-dev/react";
 import { useAccount } from 'wagmi'
 import { ethers } from 'ethers'
 import { useRouter } from 'next/router'
+import Link from 'next/link'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -52,11 +53,13 @@ const CapTable = () => {
 
     const { data: name, } = useContractRead(contract, "name", [])
 
-    const { data: isOwner, } = useContractRead(contract, "isOwner", [address])
+    const { data: isOwner, isLoading: isOwnerLoading } = useContractRead(contract, "isOwner", [address])
 
     const { data: authorizedInvestors } = useContractRead(contract, "getAuthorizedInvestors", [])
     console.log("authorized investors: ", authorizedInvestors)
 
+    const { data: accreditedInvestor } = useContractRead(contract, "getAuthorizedInvestors", [])
+    console.log("authorized investors: ", authorizedInvestors)
 
 
     return (
@@ -69,23 +72,33 @@ const CapTable = () => {
                 <meta property="og:description" content="" />
             </Head>
             <main
-                className={`flex min-h-[92dvh] flex-col space-y-6 md:space-y-12 w-full bg-[#0b111b] md:py-12 p-6 md:px-24 ${inter.className}`}
+                className={`flex min-h-[92dvh] flex-col space-y-6 md:space-y-6 w-full bg-[#0b111b] md:py-12 p-6 md:px-24 ${inter.className}`}
             >
                 {
-                    isOwner ?
-                        <div className='border border-[#27272A] rounded-xl flex items-center text-white space-x-4 p-4 md:w-2/5 hover:bg-[#101827] hover:cursor-pointer'
-                            onClick={() => setEquityModal(true)}
-                        >
-                            <div>
-                                <Image src={link} width={75} height={75} alt='equity link' />
+                    isOwnerLoading ?
+                        <div className="flex items-center text-white space-x-4 md:w-2/5 hover:bg-[#101827] hover:cursor-pointer'">
+                            <div className="animate-pulse flex space-x-4 w-full p-4 border rounded-xl">
+                                <div className="rounded-full bg-gray-300 h-8 w-8"></div>
+                                <div className="flex-1 space-y-2 py-1">
+                                    <div className="h-2 bg-gray-300 rounded"></div>
+                                    <div className="h-2 bg-gray-300 rounded"></div>
+                                </div>
                             </div>
-                            <div className='space-y-1'>
-                                <h3 className='font-medium text-lg'>Issue equity link</h3>
-                                <p className='font-light leading-tight text-xs md:text-sm'>Create a link for the investors to deposit funds and receive equity on-chain assets.</p>
+                        </div> :
+                        isOwner ?
+                            <div className='border border-[#27272A] rounded-xl flex items-center text-white space-x-4 p-4 md:w-2/5 hover:bg-[#101827] hover:cursor-pointer'
+                                onClick={() => setEquityModal(true)}
+                            >
+                                <div>
+                                    <Image src={link} width={75} height={75} alt='equity link' />
+                                </div>
+                                <div className='space-y-1'>
+                                    <h3 className='font-medium text-lg'>Issue equity link</h3>
+                                    <p className='font-light leading-tight text-xs md:text-sm'>Create a link for the investors to deposit funds and receive equity on-chain assets.</p>
+                                </div>
                             </div>
-                        </div>
-                        :
-                        <h2 className='text-white font-medium text-lg md:text-xl'>You are not the owner of this vault</h2>
+                            :
+                            <h2 className='text-white font-medium text-lg md:text-3xl'>Investor Portal</h2>
                 }
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
                     <div className='relative border border-[#27272A] rounded-2xl w-full p-6 space-y-8 md:pr-24'>
@@ -98,13 +111,27 @@ const CapTable = () => {
                             <p className='text-lg text-[#A1A1AA]'>Total funding received</p>
                             {
                                 isOwner ?
-                                    <div className="flex items-center space-x-2 absolute top-2 right-8">
+                                    <div className="flex flex-col md:absolute top-2 right-8">
                                         <motion.button
-                                            className="text-white border border-white rounded-2xl px-6 py-2 hover:bg-[#101827] text-sm md:text-base font-light mx-auto mt-2"
+                                            className="text-white border border-white rounded-2xl px-6 py-2 hover:bg-[#101827] text-sm md:text-base font-light mt-2"
                                             disabled={isLoading}
                                         >
                                             Withdraw
                                         </motion.button>
+                                        {
+                                            balance > .1 ?
+                                                <div className="flex items-center">
+                                                    <Link href={`/exit-investment/${vault}`} className='w-full text-center'>
+                                                        <motion.div
+                                                            className="text-white border border-white rounded-2xl px-6 py-2 hover:bg-[#101827] text-sm md:text-base font-light mx-auto mt-2"
+                                                        >
+                                                            Exit investment
+                                                        </motion.div>
+                                                    </Link>
+                                                </div>
+                                                :
+                                                null
+                                        }
                                     </div>
                                     :
                                     null
