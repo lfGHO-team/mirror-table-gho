@@ -187,14 +187,6 @@ const CreateCapTable = () => {
                                 toast.error("Error creating cap table");
                             }
                             }
-                            onSuccess={() => {
-                                toast.success("Cap table created!");
-                                // wait 2 seconds
-                                setTimeout(() => {
-                                    router.push("/dashboard")
-                                }, 1000)
-                            }
-                            }
                             action={(contract) => {
                                 contract.call("createNewMirrorTable", [companyName, ticker, signers, numConfirmationsRequired, `${minInitialInvestment}000000000000000000`])
                             }}
