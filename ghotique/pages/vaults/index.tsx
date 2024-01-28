@@ -35,8 +35,24 @@ const CapTable = () => {
                 <meta property="og:description" content="" />
             </Head>
             <main
-                className={`flex min-h-[92dvh] flex-col space-y-6 w-full bg-[#0b111b] md:py-12 p-6 md:px-12 overflow-scroll ${inter.className}`}
+                className={`flex min-h-[92dvh] flex-col space-y-6 w-full bg-[#0b111b] md:py-12 p-6 md:px-24 overflow-scroll`}
             >
+                <div className='space-y-1 md:space-y-0'>
+                    <h2 className='text-2xl text-white font-semibold mb-4'>
+                        Vaults
+                    </h2>
+                    <p className='text-white text-sm'>
+                        These are cap tables you and others have created.
+                    </p>
+                    <p className='text-white text-sm'>
+                        We have a few example cap tables while we wait for the community to{' '}
+                        <span>
+                            <Link href='/new-cap' className='hover:cursor-pointer text-white text-sm underline'>
+                                create more
+                            </Link>
+                        </span>.
+                    </p>
+                </div>
                 {
                     isLoading && <div className='text-white'>LOADING...</div>
                 }

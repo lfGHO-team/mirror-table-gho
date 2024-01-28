@@ -27,8 +27,22 @@ const Dashboard = () => {
                 <meta property="og:description" content="" />
             </Head>
             <main
-                className={`flex min-h-[92dvh] flex-col space-y-6 w-full bg-[#0b111b] md:py-12 p-6 md:px-24 overflow-scroll ${inter.className}`}
+                className={`flex min-h-[92dvh] flex-col space-y-6 w-full bg-[#0b111b] md:py-12 p-6 md:px-24 overflow-scroll`}
             >
+                <div className='space-y-1 md:space-y-0'>
+                    <h2 className='text-2xl text-white font-semibold mb-4'>
+                        Your Cap Tables
+                    </h2>
+                    <p className='text-white text-sm'>
+                        These are the cap tables you&apos;ve created or have access to.
+                    </p>
+                    <p className='text-white text-sm'>
+                        If you haven&apos;t created one yet, click the button below:
+                    </p>
+                    <Link href={`/new-cap`} className='hover:cursor-pointer text-white text-sm underline'>
+                        Create new cap table
+                    </Link>
+                </div>
                 {
                     isLoading ?
                         <div className="flex gap-4 flex-col md:flex-row">
@@ -60,19 +74,6 @@ const Dashboard = () => {
                                     </Link>
                                 </div>
                             ))}
-                            <Link href={`/new-cap`} className='hover:bg-[#101827] hover:cursor-pointer flex w-full'
-                            >
-                                <div className='border border-[#27272A] rounded-xl flex items-center text-white space-x-2 p-4 hover:bg-[#101827] hover:cursor-pointer w-full'
-                                >
-                                    <div>
-                                        <TbTable size={20} />
-                                    </div>
-                                    <span className='text-xs'>
-                                        Create new cap table
-                                    </span>
-
-                                </div>
-                            </Link>
                         </div>
                 }
 

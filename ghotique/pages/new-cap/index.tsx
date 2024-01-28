@@ -108,6 +108,9 @@ const CreateCapTable = () => {
                     <p className='text-[#A1A1AA] text-sm'>
                         By clicking “Create cap table” you will initiate the vault smart contract creation which will require signing 2 transactions.
                     </p>
+                    {/* <p className='text-[#A1A1AA] text-sm'>
+                        The first transaction will approve your GHO and the second will create and add the initial investment to the vault.
+                    </p> */}
                     <p className='text-[#A1A1AA] text-sm'>
                         We do not charge a fee on creating a vault. You will have to pay a gas fee for the transactions.
                     </p>

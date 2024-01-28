@@ -12,7 +12,7 @@ import { motion } from 'framer-motion';
 const navigation = [
     { name: 'Dashboard', href: '/dashboard', current: false },
     { name: 'Funds vault', href: '/vaults', current: false },
-    { name: 'Notes', href: '#', current: false },
+    { name: 'Notes', href: '/notes', current: false },
 ]
 
 function classNames(...classes: string[]) {
