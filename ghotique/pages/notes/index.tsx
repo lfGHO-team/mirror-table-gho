@@ -10,7 +10,13 @@ const Notes = () => {
                 Our system streamlines investment flows via web3 technology, providing a seamless and efficient experience for both investors and founders.
             </p>
             <ol className='list-decimal pl-5 mb-4 text-sm'>
-                <li>Get your test GHO stablecoin from official aave faucet links. (we&apos;re using Sepolia!)</li>
+                <li>Get your test GHO stablecoin from {" "}
+                    <span>
+                        <a href="https://gho.aave.com/faucet/" target='_blank'>
+                            official aave faucet links.{" "}
+                        </a>
+                    </span>
+                    (we&apos;re using Sepolia!)</li>
                 <li>Come to Ghothique and go to the section <span className='underline'>create cap table</span>.</li>
                 <li>Investors need to be whitelisted in the smart contract by one of the multisig signers via the <span className='underline'>issue equity</span> feature</li>
                 <li>Investors receive digital assets (erc20) representing their shares.</li>
