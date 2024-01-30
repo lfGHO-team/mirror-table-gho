@@ -16,7 +16,7 @@ const Layout = (props: any) => (
             <meta property="og:image" content="https://nftstorage.link/ipfs/bafkreic6vapgnpvmemyjnhpmrzh6ap3nlwerw47xkhhyqjlbqcwnklyrbi" />
 
 
-            <meta name="twitter:card" content="summary" />
+            <meta name="twitter:card" content="summary_large_image" />
             <meta name="twitter:site" content="@erikfazj" />
             <meta name="twitter:title" content="Ghothique" />
             <meta name="twitter:description" content="Web3 investments made simple." />
