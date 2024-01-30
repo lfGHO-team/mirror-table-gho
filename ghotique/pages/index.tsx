@@ -16,10 +16,22 @@ const Home = () => {
     <>
       <Head>
         <title>Ghothique</title>
-        <meta name="description" content="Investments made simple" />
-        <meta name="keywords" content="investments, cap table, capitalization table" />
+        <meta httpEquiv='Content-Type' content='text/html; charset=utf-8' />
+        <meta name='viewport' content='width=device-width, initial-scale=1' />
+        <link rel="icon" href="/favicon.ico" />
+
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://ghothique.xyz" />
         <meta property="og:title" content="Ghothique" />
-        <meta property="og:description" content="" />
+        <meta property="og:description" content="Web3 investments made simple." />
+        <meta property="og:image" content="https://nftstorage.link/ipfs/bafkreic6vapgnpvmemyjnhpmrzh6ap3nlwerw47xkhhyqjlbqcwnklyrbi" />
+
+
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:site" content="@erikfazj" />
+        <meta name="twitter:title" content="Ghothique" />
+        <meta name="twitter:description" content="Web3 investments made simple." />
+        <meta name="twitter:image" content="https://nftstorage.link/ipfs/bafkreic6vapgnpvmemyjnhpmrzh6ap3nlwerw47xkhhyqjlbqcwnklyrbi" />
       </Head>
       <main
         className={`flex min-h-[92dvh] flex-col space-y-6 md:space-y-12 items-center w-full bg-[#0b111b] justify-center p-6 md:p-24 ${inter.className}`}
