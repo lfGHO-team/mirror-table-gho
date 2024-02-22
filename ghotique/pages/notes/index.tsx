@@ -4,7 +4,7 @@ const Notes = () => {
     return (
         <div className='text-white p-4 rounded-lg shadow-md md:max-w-screen-xl md:mx-auto'>
             <h3 className='text-2xl font-semibold mb-4'>
-                How Our Demo Works
+                How Our Demo Worksa
             </h3>
             <p className='text-md mb-3 text-sm'>
                 Our system streamlines investment flows via web3 technology, providing a seamless and efficient experience for both investors and founders.

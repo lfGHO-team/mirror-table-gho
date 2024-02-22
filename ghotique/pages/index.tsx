@@ -9,8 +9,6 @@ import alice from "../assets/icons/alice.png"
 import { toast } from 'sonner'
 import Link from 'next/link'
 
-const inter = Inter({ subsets: ['latin'] })
-
 const Home = () => {
   return (
     <>
@@ -34,7 +32,7 @@ const Home = () => {
         <meta name="twitter:image" content="https://nftstorage.link/ipfs/bafkreic6vapgnpvmemyjnhpmrzh6ap3nlwerw47xkhhyqjlbqcwnklyrbi" />
       </Head>
       <main
-        className={`flex min-h-[92dvh] flex-col space-y-6 md:space-y-12 items-center w-full bg-[#0b111b] justify-center p-6 md:p-24 ${inter.className}`}
+        className={`flex min-h-[92dvh] flex-col space-y-6 md:space-y-12 items-center w-full bg-[#0b111b] justify-center p-6 md:p-24`}
       >
         <div className='space-y-1 md:space-y-4 text-center'>
           <h1 className='text-white text-2xl md:text-[50px] font-bold'>Investments made simple</h1>
