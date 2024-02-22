@@ -21,6 +21,8 @@ const Layout = (props: any) => (
             <meta name="twitter:title" content="Ghothique" />
             <meta name="twitter:description" content="Web3 investments made simple." />
             <meta name="twitter:image" content="https://nftstorage.link/ipfs/bafkreic6vapgnpvmemyjnhpmrzh6ap3nlwerw47xkhhyqjlbqcwnklyrbi" />
+            <link rel="manifest" href="/manifest.json" />
+
         </Head>
         <div>
             <Navbar />
